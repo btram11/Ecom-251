@@ -63,13 +63,13 @@ export const Header = () => {
             {/* Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               <Link
-                href="#"
+                href="/"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Trang chủ
               </Link>
               <a
-                href="#"
+                href="/products"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Danh mục

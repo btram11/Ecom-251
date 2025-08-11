@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ProductCard } from "./product-card";
+import Link from "next/link";
 
 const products = [
   {
@@ -77,13 +77,13 @@ export const FeaturedProducts = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Sản phẩm gần bạn</h2>
-          <Button
-            variant="ghost"
-            className="gap-2 text-success hover:text-success/80"
+          <Link
+            href="/products"
+            className="link-glow text-sm transition-all duration-300 hover:gap-3"
           >
             Xem tất cả
             <ArrowRight className="h-4 w-4" />
-          </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-4">
