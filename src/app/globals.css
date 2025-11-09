@@ -19,7 +19,7 @@
   --color-muted: #e7efea;
   --color-muted-foreground: #737373;
 
-  --color-accent: #05612e;
+  --color-accent: #16a249;
   --color-accent-foreground: #ffffff;
 
   --color-destructive: #ef4343;
@@ -27,7 +27,7 @@
 
   --color-border: #dae7df;
   --color-input: #dae7df;
-  --color-ring: #05612e;
+  --color-ring: #16a249;
 
   --color-success: #16a249;
   --color-success-foreground: #ffffff;
@@ -44,11 +44,11 @@
   --radius-lg: var(--radius);
 }
 
-*,
+/* *,
 *::before,
 *::after {
   border-color: var(--color-border);
-}
+} */
 
 html {
   scroll-behavior: smooth;
@@ -80,3 +80,51 @@ html {
   --color-input: #1a2a22;
   --color-ring: #1bbe5a;
 } */
+.link-glow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: var(--color-success);
+  overflow: hidden;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.link-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 45%,
+    rgba(170, 255, 170, 0.6) 50%,
+    rgba(255, 255, 255, 0.9) 55%,
+    transparent 100%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+.link-glow:hover::after {
+  opacity: 1;
+  animation: glowSweep 0.9s ease-in-out;
+}
+
+@keyframes glowSweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.link-glow:hover {
+  color: var(--color-success);
+  transform: translateY(-1px); /* nhấn cảm giác hover */
+}
