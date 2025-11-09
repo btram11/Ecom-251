@@ -5,7 +5,7 @@ import Navbar from "@components/Navbar";
 import HeroSection from "@components/Banner";
 
 const CategoryCard = ({ icon, title, count }: any) => (
-  <div className="flex items-center justify-start gap-4 p-4 border rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all bg-white cursor-pointer">
+  <div className="flex items-center justify-start gap-4 p-4 border border-gray-400 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all bg-white cursor-pointer">
     <div className="w-14 h-14 flex items-center justify-center rounded-lg bg-green-50">
       <img src={icon} alt={title} className="w-8 h-8 object-contain" />
     </div>
@@ -24,15 +24,95 @@ export default function HomePage() {
     { name: "Thủy sản", icon: "/Prawn.png" },
     { name: "Gia vị", icon: "/Oil.png" },
     { name: "Gạo & ngũ cốc", icon: "/Rice.png" },
+     { name: "Gia vị", icon: "/Oil.png" },
+    { name: "Gạo & ngũ cốc", icon: "/Rice.png" },
   ];
 
   // Mẫu nhiều sản phẩm để kiểm tra layout (9 item để có 3 hàng 3 cột)
-  const products = Array.from({ length: 9 }).map((_, i) => ({
-    id: i + 1,
-    name: ["Rau muống", "Xoài cát", "Bí đỏ", "Ba rọi heo", "Thịt bò", "Cá hồi", "Ớt", "Gạo ST25", "Khoai lang"][i % 9],
-    price: ["25.000đ/kg", "45.000đ/kg", "30.000đ/kg", "110.000đ/kg", "220.000đ/kg", "150.000đ/kg", "35.000đ/kg", "20.000đ/kg", "18.000đ/kg"][i % 9],
-    image: `/products/product-${(i % 6) + 1}.jpg`, // đặt ảnh trong /public/products/product-1.jpg ... product-6.jpg
-  }));
+  const products = [
+    { id: 1, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Cai-bo-xoi.png"
+    },
+    { id: 2, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Cai-bo-xoi.png" },
+    { id: 3, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Cai-bo-xoi.png" },
+    { id: 4, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Gao-ST25.jpg" },
+    { id: 5, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Gao-ST25.jpg" },
+    { id: 6, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Bap-cai.jpg" },
+    { id: 7, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Bap-cai.jpg" },
+    { id: 8, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg",
+      image: "/Bap-cai.jpg" },
+    { id: 9, 
+      name: "Rau muống", 
+      "original_price": 200000,
+      "sale_price": 150000,
+      rating: 4.5,
+      reviews: 120,
+      address: "Hà Nội",
+      unit: "kg", 
+      image: "/Bap-cai.jpg" },
+  ]
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
@@ -46,9 +126,12 @@ export default function HomePage() {
       {/* DANH MỤC */}
       <section className="max-w-7xl mx-auto px-6 py-8">
         <h2 className="text-lg font-semibold mb-4">Danh mục sản phẩm</h2>
-        <div className="grid grid-cols-3 sm:grid-cols-3 gap-x-20 gap-y-10">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
           {categories.map((cat, idx) => (
-            <CategoryCard key={idx} icon={cat.icon} title={cat.name} count={`${Math.floor(Math.random() * 100) + 20} sản phẩm`} />
+            <div className="w-10/12 mx-auto" key={idx}>
+                <CategoryCard key={idx} icon={cat.icon} title={cat.name} count={`${Math.floor(Math.random() * 100) + 20} sản phẩm`} />
+            </div>
+           
           ))}
         </div>
       </section>
@@ -61,9 +144,18 @@ export default function HomePage() {
         </div>
 
         {/* grid 3 columns desktop, 2 tablet, 1 mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {products.map((p) => (
-            <ProductCard key={p.id} name={p.name} price={10000} image={p.image} />
+            <ProductCard 
+            key={p.id} 
+            name={p.name} 
+            sale_price={10000} 
+            original_price={20000}
+            rating={4.1}
+            reviews={120}
+            unit="kg"
+            address="La Xuan Oai"
+            image={p.image} />
           ))}
         </div>
       </section>
