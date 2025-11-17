@@ -2,8 +2,8 @@ import { Checkbox, Label, Slider } from "@components/ui/form";
 
 export const Filter = () => {
   return (
-    <aside className="w-full md:w-48 lg:w-60 space-y-6">
-      <div className="bg-card rounded-lg border p-4">
+    <aside className="w-full max-md:max-w-full space-y-6 max-w-48">
+      <div>
         <h3 className="font-semibold mb-4">Bộ lọc sản phẩm</h3>
 
         {/* Category Filter */}
