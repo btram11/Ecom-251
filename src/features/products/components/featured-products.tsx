@@ -12,7 +12,7 @@ const products = [
     originalPrice: 220000,
     rating: 4.5,
     reviews: 1000,
-    location: "Vựa trái cây côn Nhãn - Phường An Hội",
+    location: "Vựa trái cây cồn Nhãn - Phường An Hội",
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const products = [
     originalPrice: 220000,
     rating: 4.5,
     reviews: 1000,
-    location: "Vựa trái cây côn Nhãn - Phường An Hội",
+    location: "Vựa trái cây cồn Nhãn - Phường An Hội",
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const products = [
     originalPrice: 220000,
     rating: 4.5,
     reviews: 1000,
-    location: "Vựa trái cây côn Nhãn - Phường An Hội",
+    location: "Vựa trái cây cồn Nhãn - Phường An Hội",
   },
   {
     id: 4,
@@ -86,7 +86,7 @@ export const FeaturedProducts = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-4">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}

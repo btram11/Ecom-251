@@ -68,24 +68,24 @@ export const Header = () => {
               >
                 Trang chủ
               </Link>
-              <a
+              <Link
                 href="/products"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Danh mục
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Đơn hàng
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Về chúng tôi
-              </a>
+              </Link>
             </nav>
 
             {/* Search */}

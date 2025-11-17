@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProductCardProps {
   id: number;
@@ -15,6 +16,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({
+  id,
   name,
   image,
   price,
@@ -24,10 +26,10 @@ export const ProductCard = ({
   location,
 }: ProductCardProps) => {
   return (
-    <Link href={`/products/${name.replace(/\s+/g, "-").toLowerCase()}`}>
+    <Link href={`/products/${id}`}>
       <Card className="overflow-hidden hover:shadow-xl transition-all group cursor-pointer">
         <div className="relative aspect-square overflow-hidden bg-muted">
-          <img
+          <Image
             src={image}
             alt={name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
@@ -55,7 +57,7 @@ export const ProductCard = ({
               </div>
               {originalPrice && (
                 <div className="text-xs text-muted-foreground line-through">
-                  {originalPrice.toLocaleString("vi-VN")}đ
+                  {originalPrice.toLocaleString("vi-VN")} đ
                 </div>
               )}
             </div>

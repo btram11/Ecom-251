@@ -11,7 +11,7 @@ export const Filter = () => {
           <h4 className="text-sm font-medium">Danh mục</h4>
           <div className="space-y-2">
             {[
-              { id: "rave", label: "Rau củ" },
+              { id: "rau-cu", label: "Rau củ" },
               { id: "trai-cay", label: "Trái cây" },
               { id: "thit", label: "Thịt" },
               { id: "hai-san", label: "Hải sản" },
