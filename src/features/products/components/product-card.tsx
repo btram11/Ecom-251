@@ -1,5 +1,5 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card } from "@components/ui/card";
+import { Button } from "@components/ui/button";
 import { Star, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,6 +32,8 @@ export const ProductCard = ({
           <Image
             src={image}
             alt={name}
+            width={200}
+            height={200}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         </div>

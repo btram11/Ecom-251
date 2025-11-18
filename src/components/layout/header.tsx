@@ -1,7 +1,7 @@
 import { Search, ShoppingCart, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@components/ui/button";
+import { Input } from "@components/ui/input";
+import { Badge } from "@components/ui/badge";
 import Link from "next/link";
 
 function TopBar() {

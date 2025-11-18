@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/form";
+} from "@components/ui/form";
 
 const products = [
   {

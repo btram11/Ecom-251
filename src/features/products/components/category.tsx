@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "@components/ui/card";
 
 const categories = [
   { id: 1, name: "Trái cây", icon: "🍊", count: "300+ sản phẩm" },

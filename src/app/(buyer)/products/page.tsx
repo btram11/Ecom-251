@@ -1,5 +1,5 @@
-import { ProductsList } from "@/features/products/components/products-list";
-import { Breadcrumb } from "@components/ui/breadcrum";
+import { ProductsList } from "@features/products/components/products-list";
+import { Breadcrumb } from "@components/ui/breadcrumb";
 
 export default function ProductsPage() {
   return (

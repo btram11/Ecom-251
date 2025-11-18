@@ -126,5 +126,5 @@ html {
 
 .link-glow:hover {
   color: var(--color-success);
-  transform: translateY(-1px); /* nhấn cảm giác hover */
+  transform: translateY(-1px);
 }

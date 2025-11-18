@@ -1,8 +1,8 @@
 import { Search, MapPin, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FeaturedProducts } from "@/features/products/components/featured-products";
-import { CategoryGrid } from "@/features/products/components/category";
+import { Button } from "@components/ui/button";
+import { Input } from "@components/ui/input";
+import { FeaturedProducts } from "@features/products/components/featured-products";
+import { CategoryGrid } from "@features/products/components/category";
 
 export const Hero = () => {
   return (
