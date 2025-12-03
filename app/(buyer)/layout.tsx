@@ -1,5 +1,5 @@
-import { Footer } from "@components/layout/footer";
-import { Header } from "@components/layout/header";
+import { Footer } from "@widgets/footer";
+import { Header } from "@widgets/header";
 import { ArrowUp } from "lucide-react";
 
 export default function BuyerLayout({
