@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription
 } from "@components/ui/card";
 import {
   Select,
@@ -40,72 +41,69 @@ const data = [
 export default function StatisticsPage() {
   return (
     <div className="container mx-auto px-4 py-8 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Thống kê</h1>
-        {/* Note: Hình ảnh gốc không có description ở đây nhưng giữ lại nếu cần */}
-      </div>
+      <Card className="mb-8">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-3xl font-bold">Thống kê</CardTitle>
+                    <CardDescription className="text-base mt-2">Xem báo cáo và thống kê về doanh số và sản phẩm</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  
+                  {/* Card 1: Doanh thu */}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Doanh thu</CardTitle>
+                      <History className="h-6 w-6 text-yellow-500" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">0</div>
+                      <p className="text-xs text-muted-foreground">Tổng doanh thu toàn thời gian</p>
+                    </CardContent>
+                  </Card>
 
-      {/* Top Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {/* Card 1: Doanh thu */}
-        <Card>
-          <CardContent className="p-6 flex items-start justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">Doanh thu</p>
-              <h3 className="text-2xl font-bold">0</h3>
-            </div>
-            
-              <History className="h-6 w-6 text-yellow-500" />
-            
-          </CardContent>
-        </Card>
+                  {/* Card 2: Số đơn hàng */}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Số đơn hàng</CardTitle>
+                      <Package className="h-6 w-6 text-purple-500" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">0</div>
+                      <p className="text-xs text-muted-foreground">Tổng số đơn hàng đã bán</p>
+                    </CardContent>
+                  </Card>
 
-        {/* Card 2: Số đơn hàng */}
-        <Card>
-          <CardContent className="p-6 flex items-start justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">
-                Số đơn hàng
-              </p>
-              <h3 className="text-2xl font-bold">0</h3>
-            </div>
-            
-              <Package className="h-6 w-6 text-purple-500" />
-            
-          </CardContent>
-        </Card>
+                  {/* Card 3: Doanh thu tháng */}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Doanh thu tháng</CardTitle>
+                      <CheckCircle className="h-6 w-6 text-green-500" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">0</div>
+                      <p className="text-xs text-muted-foreground">Doanh thu trong tháng này</p>
+                    </CardContent>
+                  </Card>
 
-        {/* Card 3: Doanh thu tháng */}
-        <Card>
-          <CardContent className="p-6 flex items-start justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">
-                Doanh thu tháng
-              </p>
-              <h3 className="text-2xl font-bold">0</h3>
-            </div>
-            
-              <CheckCircle className="h-6 w-6 text-green-500" />
-           
-          </CardContent>
-        </Card>
+                  {/* Card 4: Khách hàng */}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Khách hàng</CardTitle>
+                      <Coins className="h-6 w-6 text-blue-600" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">0</div>
+                      <p className="text-xs text-muted-foreground">Tổng số khách hàng</p>
+                    </CardContent>
+                  </Card>
 
-        {/* Card 4: Khách hàng */}
-        <Card>
-          <CardContent className="p-6 flex items-start justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">
-                Khách hàng
-              </p>
-              <h3 className="text-2xl font-bold">0</h3>
-            </div>
-           
-              <Coins className="h-6 w-6 text-blue-600" />
-           
-          </CardContent>
-        </Card>
-      </div>
+                </div>
+              </CardContent>
+            </Card>
 
       {/* Chart Section */}
       <Card className="p-6">
