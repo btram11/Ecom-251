@@ -49,40 +49,43 @@ function TopBar() {
 export const Header = () => {
   return (
     <>
-      <TopBar />
-      <header className="border-b bg-primary-background sticky top-0 z-50 shadow-sm">
+      {/* <TopBar /> */}
+      <header
+        className={
+          `bg-primary-background`
+          // sticky top-0 z-50
+        }
+      >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
-            <div className="flex items-center gap-2">
-              <div className="font-['Brush_Script_MT',cursive] text-2xl font-bold">
-                Farm Fresh
-              </div>
+            <div className="text-2xl font-semibold text-black font-[cursive]">
+              Farm <span className="text-green-600">Fresh</span>
             </div>
 
             {/* Navigation */}
-            <nav className="hidden md:flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-9 max-lg:gap-6">
               <Link
                 href="/"
-                className="text-sm font-medium hover:text-success transition-colors"
+                className="font-medium hover:text-success transition-colors"
               >
                 Trang chủ
               </Link>
               <Link
                 href="/products"
-                className="text-sm font-medium hover:text-success transition-colors"
+                className="font-medium hover:text-success transition-colors"
               >
                 Danh mục
               </Link>
               <Link
-                href="#"
-                className="text-sm font-medium hover:text-success transition-colors"
+                href="/orders"
+                className="font-medium hover:text-success transition-colors"
               >
                 Đơn hàng
               </Link>
               <Link
-                href="#"
-                className="text-sm font-medium hover:text-success transition-colors"
+                href="/about"
+                className="font-medium hover:text-success transition-colors"
               >
                 Về chúng tôi
               </Link>
@@ -90,13 +93,14 @@ export const Header = () => {
 
             {/* Search */}
             <div className="flex-1 max-w-md hidden lg:block">
-              <div className="relative">
+              <form className="relative" action="/products" method="GET">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
+                  name="q"
                   placeholder="Tìm kiếm nông sản tươi sống"
-                  className="pl-10 bg-muted/50 border-0"
+                  className="pl-10 bg-white border-0 shadow-sm"
                 />
-              </div>
+              </form>
             </div>
 
             {/* Actions */}
@@ -110,8 +114,11 @@ export const Header = () => {
                 </Link>
               </Button>
 
-              <Button variant="ghost" size="icon">
+              {/* <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
+              </Button> */}
+              <Button className="ml-2 bg-success hover:bg-success/90" asChild>
+                <Link href="/login">Đăng nhập</Link>
               </Button>
             </div>
           </div>

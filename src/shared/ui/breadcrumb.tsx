@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, ReactNode } from "react";
 import { Home } from "lucide-react";
 
 const segmentMap: Record<string, string> = {
@@ -10,8 +10,20 @@ const segmentMap: Record<string, string> = {
   seller: "Người bán",
 };
 
-export function Breadcrumb({ path }: { path: string }) {
-  const segments = path.split("/").filter(Boolean);
+type BreadcrumbProps = {
+  path: string;
+  labels?: Record<string, ReactNode>;
+};
+
+export function Breadcrumb({ path, labels = {} }: BreadcrumbProps) {
+  const cleanPath = path.split("?")[0].split("#")[0];
+
+  const segments = cleanPath.split("/").filter(Boolean);
+
+  const getLabel = (seg: string) => {
+    if (seg in labels) return labels[seg];
+    return segmentMap[seg] ?? decodeURIComponent(seg);
+  };
 
   const items = [
     <Fragment key="home">
@@ -28,7 +40,7 @@ export function Breadcrumb({ path }: { path: string }) {
     </Fragment>,
     ...segments.map((seg, idx) => {
       const href = "/" + segments.slice(0, idx + 1).join("/");
-      const label = segmentMap[seg] ?? decodeURIComponent(seg);
+      const label = getLabel(seg);
       const isLast = idx === segments.length - 1;
 
       return (
@@ -45,7 +57,7 @@ export function Breadcrumb({ path }: { path: string }) {
               {label}
             </span>
           )}
-          {!isLast && <span>/</span>}
+          {!isLast && <span className="mx-2">/</span>}
         </Fragment>
       );
     }),

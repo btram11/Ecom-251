@@ -1,4 +1,4 @@
-import { Filter } from "@features/products/ui/filter";
+import { Filter } from "./ui/filter";
 import { Button } from "@shared/ui/button";
 import { ProductsList } from "@widgets/product-list";
 import {
