@@ -1,5 +1,6 @@
 "use client";
 
+import { formatCurrency } from "@shared/utils/format";
 import type { ShippingOption } from "../../model/types";
 import { RadioCardGroup } from "@shared/ui/form";
 
@@ -23,17 +24,9 @@ export function ShippingMethodPicker({
           id: opt.id,
           title: opt.label,
           description: opt.description,
-          right: formatVnd(opt.fee),
+          right: formatCurrency(opt.fee),
         }))}
       />
     </div>
   );
-}
-
-function formatVnd(v: number) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(v);
 }
