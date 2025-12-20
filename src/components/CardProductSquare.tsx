@@ -61,7 +61,7 @@ export default function ProductCard({
       <div className="h-10 pt-2 mb-2 w-11/12 mx-auto text-center border rounded-lg bg-green-500 text-white align-middle items-center hover:bg-green-600">
           <div className="flex items-center justify-center gap-2">
             <Plus className="w-4 h-4" />
-            <text>Thêm vào giỏ hàng </text>
+            <div>Thêm vào giỏ hàng </div>
           </div>
           
         

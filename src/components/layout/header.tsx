@@ -1,3 +1,6 @@
+"use client";
+import { use, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search, ShoppingCart, User } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
@@ -47,6 +50,14 @@ function TopBar() {
 }
 
 export const Header = () => {
+  const router = useRouter();
+  const [searchInput, setSearchInput] = useState("");
+
+  function search() {
+    console.log("Searching for:", searchInput);
+    router.push(`/search?query=${encodeURIComponent(searchInput)}`);
+  }
+
   return (
     <>
       <TopBar />
@@ -75,13 +86,13 @@ export const Header = () => {
                 Danh mục
               </Link>
               <Link
-                href="#"
+                href="/orders"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Đơn hàng
               </Link>
               <Link
-                href="#"
+                href="/about"
                 className="text-sm font-medium hover:text-success transition-colors"
               >
                 Về chúng tôi
@@ -91,7 +102,10 @@ export const Header = () => {
             {/* Search */}
             <div className="flex-1 max-w-md hidden lg:block">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                  onClick={() => search()}
+                />
                 <Input
                   placeholder="Tìm kiếm nông sản tươi sống"
                   className="pl-10 bg-muted/50 border-0"
