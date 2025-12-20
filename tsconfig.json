@@ -24,13 +24,25 @@
     ],
     "paths": {
       "@components/*": [
-        "./src/components/*"
+        "./src/shared/components/*"
       ],
       "@features/*": [
         "./src/features/*"
       ],
       "@utils/*": [
         "./src/utils/*"
+      ],
+      "@entities/*": [
+        "./src/entities/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ],
+      "@widgets/*": [
+        "./src/widgets/*"
       ],
       "@/*": [
         "./src/*"
@@ -42,8 +54,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-  ],
+    ".next/dev/types/**/*.ts", 
+    "src/app/(buyer)/product/[id]/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]
