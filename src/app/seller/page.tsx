@@ -528,27 +528,23 @@ export default function SellerPage() {
       {isCancelModalOpen && orderToCancel && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300">
           <div className="bg-white rounded-lg max-w-2xl w-full mx-4 p-6 shadow-2xl">
-            <div className="text-center mb-6">
-              {/* Warning Icon */}
-              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
-                <XCircle className="h-8 w-8 text-red-600" />
-              </div>
+            <div className="text-left mb-6">
 
               {/* Title */}
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold mb-2">
                 Huỷ đơn hàng
-              </h3>
+              </h2>
 
-              {/* Content */}
-              <p className="text-sm text-gray-600">
+              {/* Content - Increased to base size */}
+              <p className="text-base text-gray-600">
                 Bạn có chắc chắn muốn huỷ đơn hàng <strong>{orderToCancel.id}</strong> không?<br />
                 Hành động này không thể hoàn tác.
               </p>
             </div>
 
-            {/* Order Info */}
+            {/* Order Info - Removed text-sm, added more spacing */}
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <div className="text-sm space-y-2">
+              <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Khách hàng:</span>
                   <span className="font-medium">{orderToCancel.customer}</span>
@@ -559,7 +555,7 @@ export default function SellerPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tổng tiền:</span>
-                  <span className="font-medium text-green-600">{orderToCancel.total.toLocaleString()}đ</span>
+                  <span className="font-medium text-green-600 text-lg">{orderToCancel.total.toLocaleString()}đ</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Phương thức thanh toán:</span>
@@ -568,64 +564,60 @@ export default function SellerPage() {
               </div>
             </div>
 
-            {/* Cancel Reason */}
+            {/* Cancel Reason - Increased title size and button text */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-900 mb-3">Lý do huỷ đơn hàng</h4>
-              <div className="grid grid-cols-2 gap-2">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Lý do huỷ đơn hàng</h4>
+              <div className="grid grid-cols-2 gap-3">
                 <Button
                   variant={cancelReason === "Khách hàng hủy" ? "default" : "outline"}
-                  size="sm"
                   onClick={() => setCancelReason("Khách hàng hủy")}
-                  className="text-xs"
+                  className="h-auto py-2"
                 >
                   Khách hàng hủy
                 </Button>
                 <Button
                   variant={cancelReason === "Hết hàng" ? "default" : "outline"}
-                  size="sm"
                   onClick={() => setCancelReason("Hết hàng")}
-                  className="text-xs"
+                  className="h-auto py-2"
                 >
                   Hết hàng
                 </Button>
                 <Button
                   variant={cancelReason === "Không liên lạc được" ? "default" : "outline"}
-                  size="sm"
                   onClick={() => setCancelReason("Không liên lạc được")}
-                  className="text-xs"
+                  className="h-auto py-2"
                 >
                   Không liên lạc được
                 </Button>
                 <Button
                   variant={cancelReason === "Lý do khác" ? "default" : "outline"}
-                  size="sm"
                   onClick={() => setCancelReason("Lý do khác")}
-                  className="text-xs"
+                  className="h-auto py-2"
                 >
                   Lý do khác
                 </Button>
               </div>
             </div>
 
-            {/* Cancellation Fee */}
+            {/* Cancellation Fee - Increased text sizes */}
             <div className="mb-6">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-900">Chi phí huỷ đơn:</span>
-                <span className="text-sm font-semibold text-red-600">25,000đ</span>
+                <span className="text-lg font-semibold text-gray-900">Chi phí huỷ đơn:</span>
+                <span className="text-lg font-bold text-red-600">25,000đ</span>
               </div>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-sm text-gray-600 mt-1">
                 Trong vòng 12h, người bán được phép hủy đơn. Sau thời gian đó, doanh nghiệp phải chịu phí hủy đơn trừ lý hợp lệ.
               </p>
             </div>
 
-            {/* Valid Reason Complaint */}
+            {/* Valid Reason Complaint - Increased label size */}
             <div className="flex items-center gap-2 mb-6">
               <Checkbox
                 id="valid-complaint"
                 checked={isValidComplaint}
                 onCheckedChange={(checked) => setIsValidComplaint(checked === true)}
               />
-              <label htmlFor="valid-complaint" className="text-sm text-gray-700">
+              <label htmlFor="valid-complaint" className="text-base text-gray-700 cursor-pointer">
                 Khiếu nại lý do huỷ hợp lệ
               </label>
             </div>
