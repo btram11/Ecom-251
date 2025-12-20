@@ -12,7 +12,7 @@ import {
   Filter,
 } from "lucide-react";
 import { Truck, Leaf, Clock } from "lucide-react";
-import RatingStar from "../../../components/RatingStar";
+import RatingStar from "../../../../components/RatingStar";
 
 const images = ["/Bap-cai.jpg", "/Bap-cai.jpg", "/Bap-cai.jpg", "/Bap-cai.jpg"];
 

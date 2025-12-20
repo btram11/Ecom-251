@@ -10,7 +10,7 @@ export default function LoginPage() {
       {/* --- BÊN TRÁI: ẢNH BANNER --- */}
       <div className="relative w-1/2 bg-gray-50">
         <Image
-          src="/Banner.png" // Đảm bảo file ảnh của bạn đúng đường dẫn này
+          src="/Banner.png" 
           alt="Chợ nông sản"
           fill
           className="object-cover"
@@ -21,8 +21,6 @@ export default function LoginPage() {
       {/* --- BÊN PHẢI: NỘI DUNG --- */}
       <div className="w-1/2 flex flex-col justify-center px-20 relative">
         
-        {/* Tiêu đề: Chào mừng trở lại */}
-        {/* Lưu ý: style={{ fontFamily: 'Grand Hotel, cursive' }} để tạo chữ viết tay như hình */}
         <h1 
           className="text-6xl text-green-500 mb-12 text-center"
           style={{ fontFamily: ' "Times New Roman", cursive' }}

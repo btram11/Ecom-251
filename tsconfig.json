@@ -40,7 +40,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts", 
-    "src/app/product/[id]/page.jsx"  ],
+    "src/app/(buyer)/product/[id]/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

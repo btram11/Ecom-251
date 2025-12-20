@@ -1,7 +1,9 @@
 "use client";
 import { Search, ShoppingCart, User } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 export default function Navbar() {
+  const router = useRouter()
+
   return (
     <header className="bg-[#F3FAF3] py-4 shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-6">
@@ -12,9 +14,9 @@ export default function Navbar() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center space-x-8 text-gray-700 font-medium">
-          <a href="#" className="hover:text-green-600">Trang chủ</a>
-          <a href="#" className="hover:text-green-600">Danh mục</a>
-          <a href="#" className="hover:text-green-600">Đơn hàng</a>
+          <a href="/" className="hover:text-green-600">Trang chủ</a>
+          <a href="/products" className="hover:text-green-600">Danh mục</a>
+          <a href="/orders" className="hover:text-green-600">Đơn hàng</a>
           <a href="#" className="hover:text-green-600">Về chúng tôi</a>
         </nav>
 
@@ -31,7 +33,7 @@ export default function Navbar() {
         {/* Icons */}
         <div className="flex items-center space-x-4">
           <div className="relative cursor-pointer">
-            <ShoppingCart size={22} className="text-gray-700" />
+            <ShoppingCart size={22} className="text-gray-700" onClick={() => router.push('/cart')} />
             <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full px-1">
               2
             </span>
