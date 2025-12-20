@@ -24,10 +24,22 @@
     ],
     "paths": {
       "@components/*": [
-        "./src/components/*"
+        "./src/shared/components/*"
       ],
       "@features/*": [
         "./src/features/*"
+      ],
+      "@entities/*": [
+        "./src/entities/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ],
+      "@widgets/*": [
+        "./src/widgets/*"
       ],
       "@/*": [
         "./src/*"
