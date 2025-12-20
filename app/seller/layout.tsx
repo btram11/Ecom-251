@@ -1,6 +1,6 @@
-import { Footer } from "@components/layout/footer";
-import { Header } from "@components/layout/header";
-import { Sidebar } from "@components/ui/sidebar";
+import { Footer } from "@widgets/footer";
+import { Header } from "@widgets/header";
+import { Sidebar } from "@widgets/sidebar";
 import { ArrowUp } from "lucide-react";
 
 export default function SellerLayout({

@@ -1,8 +1,33 @@
-import { Button } from "@components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@components/ui/card";
-import { Input } from "@components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@components/ui/form";
-import { Plus, Clock, PackageMinusIcon, TicketCheckIcon, Search, Filter, ArrowUpDown, Edit, Eye, Trash2, Package, Minus } from "lucide-react";
+import { Button } from "@shared/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@shared/ui/card";
+import { Input } from "@shared/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@shared/ui/form";
+import {
+  Plus,
+  Clock,
+  PackageMinusIcon,
+  TicketCheckIcon,
+  Search,
+  Filter,
+  ArrowUpDown,
+  Edit,
+  Eye,
+  Trash2,
+  Package,
+  Minus,
+} from "lucide-react";
 
 export default function ProductsPage() {
   return (
@@ -11,8 +36,13 @@ export default function ProductsPage() {
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-3xl font-bold">Quản lý sản phẩm</CardTitle>
-              <CardDescription className="text-base mt-2">Quản lý danh sách sản phẩm, số lượng tồn kho, trạng thái sản phẩm</CardDescription>
+              <CardTitle className="text-3xl font-bold">
+                Quản lý sản phẩm
+              </CardTitle>
+              <CardDescription className="text-base mt-2">
+                Quản lý danh sách sản phẩm, số lượng tồn kho, trạng thái sản
+                phẩm
+              </CardDescription>
             </div>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
@@ -29,7 +59,9 @@ export default function ProductsPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">15</div>
-                <p className="text-xs text-muted-foreground">Sản phẩm đang được bán</p>
+                <p className="text-xs text-muted-foreground">
+                  Sản phẩm đang được bán
+                </p>
               </CardContent>
             </Card>
 
@@ -40,7 +72,9 @@ export default function ProductsPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">2</div>
-                <p className="text-xs text-muted-foreground">Sản phẩm hết hàng</p>
+                <p className="text-xs text-muted-foreground">
+                  Sản phẩm hết hàng
+                </p>
               </CardContent>
             </Card>
 
@@ -68,10 +102,7 @@ export default function ProductsPage() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Tìm kiếm sản phẩm..."
-                className="pl-10"
-              />
+              <Input placeholder="Tìm kiếm sản phẩm..." className="pl-10" />
             </div>
             <div className="flex gap-2">
               <Select>
@@ -119,7 +150,9 @@ export default function ProductsPage() {
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">25,000đ</span>
+                <span className="text-2xl font-bold text-green-600">
+                  25,000đ
+                </span>
                 <span className="text-sm text-muted-foreground">/kg</span>
               </div>
               <div className="flex items-center justify-between">
@@ -128,7 +161,9 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">50</span>
+                  <span className="text-lg font-semibold min-w-12 text-center">
+                    50
+                  </span>
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -140,7 +175,11 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -160,7 +199,9 @@ export default function ProductsPage() {
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">35,000đ</span>
+                <span className="text-2xl font-bold text-green-600">
+                  35,000đ
+                </span>
                 <span className="text-sm text-muted-foreground">/kg</span>
               </div>
               <div className="flex items-center justify-between">
@@ -169,7 +210,9 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">30</span>
+                  <span className="text-lg font-semibold min-w-12 text-center">
+                    30
+                  </span>
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -181,7 +224,11 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -201,7 +248,9 @@ export default function ProductsPage() {
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">120,000đ</span>
+                <span className="text-2xl font-bold text-green-600">
+                  120,000đ
+                </span>
                 <span className="text-sm text-muted-foreground">/kg</span>
               </div>
               <div className="flex items-center justify-between">
@@ -210,7 +259,9 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">15</span>
+                  <span className="text-lg font-semibold min-w-12 text-center">
+                    15
+                  </span>
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -222,7 +273,11 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -242,7 +297,9 @@ export default function ProductsPage() {
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">45,000đ</span>
+                <span className="text-2xl font-bold text-green-600">
+                  45,000đ
+                </span>
                 <span className="text-sm text-muted-foreground">/kg</span>
               </div>
               <div className="flex items-center justify-between">
@@ -251,7 +308,9 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">8</span>
+                  <span className="text-lg font-semibold min-w-12 text-center">
+                    8
+                  </span>
                   <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -263,7 +322,11 @@ export default function ProductsPage() {
                   <Button size="sm" variant="outline">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
