@@ -29,6 +29,9 @@
       "@features/*": [
         "./src/features/*"
       ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
       "@/*": [
         "./src/*"
       ]

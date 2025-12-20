@@ -1,5 +1,5 @@
 import { Footer } from "@components/layout/footer";
-import { Header } from "@components/layout/header";
+import { SellerHeader } from "./components/seller-header";
 import { Sidebar } from "@components/ui/sidebar";
 import { ArrowUp } from "lucide-react";
 
@@ -10,7 +10,7 @@ export default function SellerLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <SellerHeader />
       <main className="flex-1 flex">
         <Sidebar className="m-4" />
         <div className="flex-1 p-4">{children}</div>
