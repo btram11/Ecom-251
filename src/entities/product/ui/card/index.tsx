@@ -37,6 +37,7 @@ export const ProductCard = ({
             alt={name}
             width={200}
             height={200}
+            unoptimized={image.startsWith("http://localhost")}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         </div>

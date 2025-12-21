@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@shared/ui/button";
 import {
   Card,
@@ -17,8 +18,109 @@ import {
 import { Label } from "@shared/ui/form";
 import { Checkbox } from "@shared/ui/form";
 import { Upload, Save, X, Star, Tag } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { environment } from "../../../environment";
+type Category = {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  imageType: string;
+};
+
+
 
 export default function AddProductPage() {
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [name, setName] = useState("");
+  const [baseUnit, setBaseUnit] = useState("");
+  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [rating, setRating] = useState("");
+  const [location, setLocation] = useState("");
+
+  const [imageBase64, setImageBase64] = useState<string>("");
+  const [imageType, setImageType] = useState<string>("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${environment.SERVICE_URL}/api/categories`);
+        const json = await res.json();
+
+        if (json.success) {
+          setCategories(json.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+
+  const handleImageUpload = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Vui lòng chọn file ảnh");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Ảnh không được vượt quá 2MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      setImageBase64(base64);
+      setImageType(file.type);
+    };
+    reader.readAsDataURL(file);
+  };
+
+
+  const handleSubmit = async () => {
+    if (!name || !baseUnit || !price || !categoryId || !imageBase64) {
+      alert("Vui lòng nhập đầy đủ thông tin bắt buộc");
+      return;
+    }
+
+    const payload = {
+      name,
+      baseUnit,
+      categoryIds: [categoryId], // ✅ từ Select
+      price: Number(price),
+      discount: Number(discount) || 0,
+      rating: Number(rating) || 5,
+      location,
+      imageBlobString: imageBase64,
+      imageType,
+    };
+
+    try {
+      const res = await fetch(`${environment.SERVICE_URL}/api/products`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Upload sản phẩm thất bại");
+
+      alert("Đăng bán sản phẩm thành công!");
+
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+      alert("Có lỗi xảy ra khi đăng bán");
+    }
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50/50">
       <div className="container mx-auto px-6 py-8 max-w-7xl">
@@ -45,15 +147,35 @@ export default function AddProductPage() {
             <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
               {/* Main image indicator */}
               <div className="relative group">
-                <div className="aspect-square border-2 border-primary border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200">
+                <label className="aspect-square border-2 border-primary border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200">
                   <Upload className="h-10 w-10 text-primary mb-3" />
-                  <span className="text-sm text-primary font-medium text-center">
-                    Ảnh chính
-                  </span>
-                  <span className="text-xs text-muted-foreground text-center mt-1">
+                  <span className="text-sm text-primary font-medium">Ảnh chính</span>
+                  <span className="text-xs text-muted-foreground mt-1">
                     Click để thêm
                   </span>
-                </div>
+                  
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        handleImageUpload(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </label>
+                {imageBase64 && (
+                  <div className="mt-6 flex justify-center">
+                    <img
+                      src={`data:${imageType};base64,${imageBase64}`}
+                      alt="Preview"
+                      className="h-40 rounded-lg border"
+                    />
+                  </div>
+                )}
+
                 <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-2 shadow-lg">
                   <Star className="h-4 w-4" />
                 </div>
@@ -72,6 +194,8 @@ export default function AddProductPage() {
                 </div>
               ))}
             </div>
+            
+
             <p className="text-sm text-muted-foreground mt-6 text-center">
               💡 Mẹo: Sử dụng ảnh chất lượng cao, chụp từ nhiều góc độ để sản
               phẩm được hiển thị đẹp nhất.
@@ -97,6 +221,8 @@ export default function AddProductPage() {
                   id="product-name"
                   placeholder="Ví dụ: Rau muống tươi Đà Lạt"
                   className="h-12"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
 
@@ -104,18 +230,23 @@ export default function AddProductPage() {
                 <Label htmlFor="category" className="text-sm font-medium">
                   Danh mục *
                 </Label>
-                <Select>
+                <Select
+                  value={categoryId ? String(categoryId) : undefined}
+                  onValueChange={(value) => setCategoryId(Number(value))}
+                >
                   <SelectTrigger className="h-12">
                     <SelectValue placeholder="Chọn danh mục" />
                   </SelectTrigger>
+
                   <SelectContent>
-                    <SelectItem value="vegetables">Rau củ quả</SelectItem>
-                    <SelectItem value="fruits">Trái cây</SelectItem>
-                    <SelectItem value="spices">Gia vị</SelectItem>
-                    <SelectItem value="herbs">Thảo mộc</SelectItem>
-                    <SelectItem value="grains">Ngũ cốc</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={String(category.id)}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+
               </div>
 
               <div className="space-y-3">
@@ -126,6 +257,8 @@ export default function AddProductPage() {
                   id="origin"
                   placeholder="Ví dụ: Đà Lạt, Lâm Đồng"
                   className="h-12"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
                 />
               </div>
             </div>
@@ -163,6 +296,8 @@ export default function AddProductPage() {
                   type="number"
                   placeholder="25000"
                   className="h-12"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
 
@@ -170,18 +305,17 @@ export default function AddProductPage() {
                 <Label htmlFor="unit" className="text-sm font-medium">
                   Đơn vị *
                 </Label>
-                <Select>
+                <Select onValueChange={(value) => setBaseUnit(value)}>
                   <SelectTrigger className="h-12">
                     <SelectValue placeholder="Chọn đơn vị" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="kg">Kg</SelectItem>
-                    <SelectItem value="gram">Gram</SelectItem>
-                    <SelectItem value="piece">Cái</SelectItem>
-                    <SelectItem value="bunch">Bó</SelectItem>
-                    <SelectItem value="pack">Gói</SelectItem>
+                    <SelectItem value="KILOGRAM">KILOGRAM</SelectItem>
+                    <SelectItem value="LITER">LITER</SelectItem>
+                    <SelectItem value="PIECE">PIECE</SelectItem>
                   </SelectContent>
                 </Select>
+
               </div>
 
               <div className="space-y-3">
@@ -343,7 +477,7 @@ export default function AddProductPage() {
             <X className="h-5 w-5 mr-2" />
             Hủy
           </Button>
-          <Button size="lg" className="px-8 bg-green-600 hover:bg-green-700">
+          <Button onClick={handleSubmit} size="lg" className="px-8 bg-green-600 hover:bg-green-700">
             <Save className="h-5 w-5 mr-2" />
             Đăng bán sản phẩm
           </Button>
