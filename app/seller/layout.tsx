@@ -1,5 +1,5 @@
 import { Footer } from "@widgets/footer";
-import { SellerHeader } from "./components/seller-header";
+import { SellerHeader } from "@widgets/seller-header";
 import { Sidebar } from "@widgets/sidebar";
 import { ArrowUp } from "lucide-react";
 

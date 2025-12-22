@@ -1,20 +1,19 @@
 "use client";
 
-import React from "react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@components/ui/card";
+} from "@shared/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@components/ui/form/select";
+} from "@shared/ui/form";
 import {
   ComposedChart,
   Line,
