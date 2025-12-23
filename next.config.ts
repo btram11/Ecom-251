@@ -22,6 +22,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@components': require('path').resolve(__dirname, 'src/components'),
+      '@features': require('path').resolve(__dirname, 'src/features'),
+      '@utils': require('path').resolve(__dirname, 'src/utils'),
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
