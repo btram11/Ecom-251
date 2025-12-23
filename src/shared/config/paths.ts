@@ -1,5 +1,5 @@
 export const paths = {
-  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL ?? "localhost:8003",
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8003",
 
   products: {
     list: "/api/products",
