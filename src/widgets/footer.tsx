@@ -11,7 +11,7 @@ export const Footer = () => {
             <p className="text-sm mb-4 opacity-90">
               Nhận ngay mã giảm giá và thông báo đặc biệt qua email
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <input
                 type="email"
                 placeholder="Nhập email của bạn"
