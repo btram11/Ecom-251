@@ -90,10 +90,16 @@ export default function AddProductPage() {
       return;
     }
 
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("Bạn chưa đăng nhập");
+      return;
+    }
+
     const payload = {
       name,
       baseUnit,
-      categoryIds: [categoryId], // ✅ từ Select
+      categoryIds: [categoryId],
       price: Number(price),
       discount: Number(discount) || 0,
       rating: Number(rating) || 5,
@@ -105,7 +111,11 @@ export default function AddProductPage() {
     try {
       const res = await fetch(`${environment.SERVICE_URL}/api/products`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        cache: "no-store",    
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(payload),
       });
 
@@ -113,7 +123,7 @@ export default function AddProductPage() {
 
       alert("Đăng bán sản phẩm thành công!");
 
-      router.refresh();
+      window.location.reload()
     } catch (err) {
       console.error(err);
       alert("Có lỗi xảy ra khi đăng bán");

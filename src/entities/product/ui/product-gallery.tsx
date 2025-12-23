@@ -141,6 +141,7 @@ export function ProductGallery({ images }: { images: string[] }) {
                         : "ring-1 ring-transparent group-hover:ring-gray-300"
                     )}
                     style={{ width: thumbSize, height: thumbSize }}
+                    unoptimized={img.startsWith("http://localhost")}
                   />
 
                   {isActive ? (
@@ -173,6 +174,7 @@ export function ProductGallery({ images }: { images: string[] }) {
           height={450}
           className="w-full max-h-[450px] rounded-2xl bg-gray-50 object-contain shadow-md"
           priority
+          unoptimized={activeSrc.startsWith("http://localhost")}
         />
       </div>
     </div>
