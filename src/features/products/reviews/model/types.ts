@@ -5,3 +5,12 @@ export type Review = {
   rating: number;
   comment: string;
 };
+
+export type ProductApi = {
+  id: number;
+  name: string;
+  imageUrl: string;
+  price: number;
+  discount: number;
+};
+

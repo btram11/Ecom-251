@@ -61,6 +61,7 @@ export function OrderCard({
                 alt={item.name}
                 fill
                 className="object-cover"
+                unoptimized={item.image.startsWith("http://localhost")}
               />
             </div>
 

@@ -19,7 +19,7 @@ type ProductApiResponse = {
 };
 
 export async function getProductById(
-  productId: string
+  productId: number
 ): Promise<Product | null> {
   try {
     const res = await fetch(

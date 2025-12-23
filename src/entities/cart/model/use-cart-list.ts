@@ -2,20 +2,40 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
+  ICartItemGroup,
   type ICartItem as CartItem,
   type ICartItemGroup as CartItemGroup,
 } from "@/entities/cart";
 import { MOCK_CART_GROUPS } from "@features/purchase/cart/mock";
+import { getUserCart } from "../api/get-cart";
+import { mapCartToGroups } from "./map-cart";
 
-export function useCartList(initialGroups: CartItemGroup[] = MOCK_CART_GROUPS) {
-  const [groups, setGroups] = useState<CartItemGroup[]>(initialGroups);
+export function useCartList() {
+  const [groups, setGroups] = useState<ICartItemGroup[]>([]);
+  const [loading, setLoading] = useState(true);  
 
   const items = useMemo<CartItem[]>(
     () => groups.flatMap((g) => g.lines),
     [groups]
   );
+
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const cartItems = await getUserCart();
+        const mapped = await mapCartToGroups(cartItems);
+        setGroups(mapped);
+      } catch (e) {
+        console.error("Load cart failed", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCart();
+  }, []);
 
   const cartQty = items.reduce((s, it) => s + it.qty, 0);
 
