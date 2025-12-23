@@ -233,7 +233,7 @@ export const FeaturedProducts = () => {
 
   return (
     <section className="py-12">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2 md:px-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Sản phẩm gần bạn</h2>
 
@@ -252,7 +252,7 @@ export const FeaturedProducts = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-4 gap-2">
           {loading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div

@@ -2,17 +2,9 @@ import { Card } from "@shared/ui/card";
 import { Star, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { ProductCardData } from "@entities/product/model/types";
 
-export interface ProductCardProps {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  rating?: number;
-  reviews?: number;
-  location: string;
-
+export interface ProductCardProps extends ProductCardData {
   action?: React.ReactNode;
 }
 

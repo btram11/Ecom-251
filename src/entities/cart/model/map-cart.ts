@@ -20,7 +20,7 @@ export async function mapCartToGroups(cartItems: any[]): Promise<ICartItemGroup[
     groups[item.sellerId].lines.push({
         id: `${item.sellerId}-${item.productId}`,
         name: product?.name ?? "Sản phẩm",
-        imageUrl: product?.images[0] || "/placeholder.png",
+        imageUrl: product?.images?.[0] || "/placeholder.png",
         price: product?.priceVndPerKg || 0,
         qty: 1,
         isSelected: false,
