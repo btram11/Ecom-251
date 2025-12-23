@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@shared/ui/button";
 import {
   Card,
@@ -28,8 +30,10 @@ import {
   Package,
   Minus,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ProductsPage() {
+  const router = useRouter();
   return (
     <div className="container mx-auto px-4 py-8">
       <Card className="mb-8">
@@ -44,7 +48,10 @@ export default function ProductsPage() {
                 phẩm
               </CardDescription>
             </div>
-            <Button className="gap-2">
+            <Button
+              className="gap-2"
+              onClick={() => router.push("/seller/add-product")}
+            >
               <Plus className="h-4 w-4" />
               Thêm sản phẩm mới
             </Button>
@@ -55,7 +62,7 @@ export default function ProductsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Đang bán</CardTitle>
-                <Clock className="h-4 w-4 text-muted-foreground" />
+                <Clock className="h-6 w-6 text-yellow-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">15</div>
@@ -68,7 +75,7 @@ export default function ProductsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Hết hàng</CardTitle>
-                <PackageMinusIcon className="h-4 w-4 text-muted-foreground" />
+                <PackageMinusIcon className="h-6 w-6 text-purple-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">2</div>
@@ -81,7 +88,7 @@ export default function ProductsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Đã ẩn</CardTitle>
-                <TicketCheckIcon className="h-4 w-4 text-muted-foreground" />
+                <TicketCheckIcon className="h-6 w-6 text-green-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">0</div>
