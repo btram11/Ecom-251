@@ -84,6 +84,9 @@ export const Filter = () => {
             ))}
           </div>
         </div>
+
+        <div className="w-full mt-6 bg-green-600 hover:bg-green-800  text-white font-bold text-center rounded-md p-2">Lọc sản phẩm</div>
+
       </div>
     </aside>
   );

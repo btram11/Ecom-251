@@ -51,7 +51,7 @@ const products = [
     id: "5",
     name: "Thịt heo đùi tươi",
     image:
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&h=400&fit=crop",
+      "/Bap-cai.jpg",
     price: 180000,
     originalPrice: 220000,
     rating: 4.5,
@@ -62,7 +62,7 @@ const products = [
     id: "6",
     name: "Thịt heo ba chỉ",
     image:
-      "https://images.unsplash.com/photo-1551214012-8e67e4d73d07?w=400&h=400&fit=crop",
+      "/Bap-cai.jpg",
     price: 180000,
     originalPrice: 220000,
     rating: 4.5,

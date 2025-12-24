@@ -18,8 +18,8 @@ const mockProducts: Record<string, Product> = {
     priceVndPerKg: 40000,
     images: [
       "/Bap-cai.jpg",
-      "/Bap-cai.jpg",
-      "/Bap-cai.jpg",
+      "/Cai-bo-xoi.png",
+      "/Xoai-cat-hoa-loc.jpg",
       "/Bap-cai.jpg",
       "/Bap-cai.jpg",
       "/Bap-cai.jpg",
