@@ -6,36 +6,39 @@ import {
   type Product,
 } from "@/entities/product";
 import { ReviewSection, type Review } from "@/features/products/reviews";
+import { getProductByIdRaw } from "@entities/product/api/get-product";
+import { isOk } from "@shared/api";
 import { Breadcrumb } from "@shared/ui/breadcrumb";
-import { useState } from "react";
+import { notFound } from "next/navigation";
 
-export function ProductDetailPage({
-  product,
-  reviews,
+export async function ProductDetailPage({
+  id
+  // product,
+  // reviews,
 }: {
-  product: Product;
-  reviews: Review[];
+  // product: Product;
+  // reviews: Review[];
+  id: string
 }) {
-
-  const [openComment, setOpenComment] = useState(false);
-  const [imgs, setImgs] = useState(product.images);
-  const [imgIdx, setImgIdx] = useState(0);
-  
+  const productRes = await getProductByIdRaw(id);
+  if (!isOk(productRes)) {
+    notFound()
+  }
+  const product = productRes.data
   return (
     <div>
     <div className={`container mx-auto px-4 py-8`}>
       <Breadcrumb
-        path={`/products/${product.id}`}
-        labels={{ [String(product.id)]: product.name }}
+        path={`/products/${id}`}
+        labels={{ [String(id)]: product.name }}
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <ProductGallery images={product.images} />
+        <ProductGallery images={[product.imageUrl ?? "/placeholder.png"]} />
         <ProductInfo product={product} />
       </div>
 
-      <ProductDescription description={product.description} />
-      <ReviewSection reviews={reviews} setOpenComment={setOpenComment} openComment={openComment}/>
-    </div>
+      <ProductDescription description={product.description ?? "Chưa có thông tin mô tả"} />
+      <ReviewSection productID={id} sellerID={"1"}/>
     </div>
   );
 }

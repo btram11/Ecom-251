@@ -128,6 +128,8 @@ export function ProductGallery({ images }: { images: string[] }) {
                         ? "ring-2 ring-emerald-600 opacity-100"
                         : "ring-1 ring-transparent group-hover:ring-gray-300 opacity-80 hover:opacity-100"
                     )}
+                    style={{ width: thumbSize, height: thumbSize }}
+                    unoptimized={img.startsWith("http://localhost")}
                   />
                 </button>
               );
@@ -153,17 +155,13 @@ export function ProductGallery({ images }: { images: string[] }) {
         style={{ height: FIXED_MAIN_HEIGHT }} 
       >
         <Image
-            key={activeSrc}
-            src={activeSrc}
-            alt="product"
-            fill 
-            className={cn(
-                "object-contain p-2",
-                "transition-opacity duration-300 ease-in-out", 
-                isAnimating ? "opacity-50" : "opacity-100"
-            )}
-            priority 
-            sizes="(max-width: 768px) 100vw, 800px"
+          src={activeSrc}
+          alt="product"
+          width={800}
+          height={450}
+          className="w-full max-h-[450px] rounded-2xl bg-gray-50 object-contain shadow-md"
+          priority
+          unoptimized={activeSrc.startsWith("http://localhost")}
         />
       </div>
     </div>

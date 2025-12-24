@@ -16,7 +16,6 @@ type CartItemGroupProps = {
 
   /** User click checkbox từng item */
   onToggleItem: (itemId: string) => void;
-
   onIncrease: (itemId: string) => void;
   onDecrease: (itemId: string) => void;
   onRemove: (itemId: string) => void;

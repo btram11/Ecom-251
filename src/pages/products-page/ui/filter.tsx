@@ -1,6 +1,40 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { Category } from "@entities/category";
 import { Checkbox, Label, Slider } from "@shared/ui/form";
 
-export const Filter = () => {
+type Props = {
+  categories: Category[];
+};
+
+export const Filter = ({ categories }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const updateParam = (key: string, value?: string) => {
+    const params = new URLSearchParams(searchParams?.toString());
+
+    if (!value) params.delete(key);
+    else params.set(key, value);
+
+    router.push(`?${params.toString()}`);
+  };
+
+  const toggleMultiValue = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams?.toString());
+    const current = params.getAll(key);
+
+    if (current.includes(value)) {
+      params.delete(key);
+      current.filter(v => v !== value).forEach(v => params.append(key, v));
+    } else {
+      params.append(key, value);
+    }
+
+    router.push(`?${params.toString()}`);
+  };
+
   return (
     <aside className="w-full max-md:max-w-full space-y-6 max-w-48">
       <div>
@@ -10,24 +44,29 @@ export const Filter = () => {
         <div className="space-y-3">
           <h4 className="text-sm font-medium">Danh mục</h4>
           <div className="space-y-2">
-            {[
-              { id: "rau-cu", label: "Rau củ" },
-              { id: "trai-cay", label: "Trái cây" },
-              { id: "thit", label: "Thịt" },
-              { id: "hai-san", label: "Hải sản" },
-              { id: "gao-bot", label: "Gạo, bột" },
-              { id: "khac", label: "Khác" },
-            ].map((category) => (
-              <div key={category.id} className="flex items-center space-x-2">
-                <Checkbox id={category.id} />
-                <Label
-                  htmlFor={category.id}
-                  className="text-sm font-normal cursor-pointer"
-                >
-                  {category.label}
-                </Label>
-              </div>
-            ))}
+            {categories.map((category) => {
+              const checked =
+                searchParams?.getAll("categoryName")
+                  .includes(category.name);
+
+              return (
+                <div key={category.id} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`cat-${category.id}`}
+                    checked={checked}
+                    onCheckedChange={() =>
+                      toggleMultiValue("categoryName", category.name)
+                    }
+                  />
+                  <Label
+                    htmlFor={`cat-${category.id}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {category.name}
+                  </Label>
+                </div>
+              );
+            })}
           </div>
         </div>
 

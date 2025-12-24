@@ -1,8 +1,32 @@
-type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
-type XOR<T, U> = (Without<T, U> & U) | (Without<U, T> & T);
+export type ApiSuccess<T> = {
+  success: true;
+  message: string;
+  data: T;
+};
 
-type Ok<T> = { status: number; data: T; error?: string };
-type Err = { status: number; err: string; error?: string };
+export type ApiError<T = any> = {
+  success: false;
+  message: string;
+  data: T;
+};
 
-export type APIResponse<T> = XOR<Ok<T>, Err>;
-export const isOk = <T>(r: APIResponse<T>): r is Ok<T> => "data" in r;
+export type APIResponse<T> = ApiSuccess<T> | ApiError;
+export const isOk = <T>(
+  r: APIResponse<T>
+): r is ApiSuccess<T> => r.success === true;
+
+
+export type Page<T> = {
+  content: T[];
+
+  totalElements: number;
+  totalPages: number;
+
+  size: number;          // page size
+  number: number;        // page index (0-based)
+  numberOfElements: number;
+
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+};

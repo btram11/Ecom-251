@@ -8,6 +8,8 @@ type RequestOptions = {
   params?: Record<string, string | number | boolean | undefined | null>;
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
+  throwOnError?: boolean;
+  errorMessage?: string; 
 };
 
 export async function fetchApi<T>(
@@ -19,13 +21,11 @@ export async function fetchApi<T>(
       method = "GET",
       headers = {},
       body,
-      cookie,
-      params,
       cache = "no-store",
       next,
+      throwOnError = false,
+      errorMessage,
     } = options;
-
-    const hasRevalidate = typeof next?.revalidate === "number";
 
     const res = await fetch(url, {
       method,
@@ -33,35 +33,40 @@ export async function fetchApi<T>(
         "Content-Type": "application/json",
         Accept: "application/json",
         ...headers,
-        // ...(cookieHeader ? { Cookie: cookieHeader } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
       credentials: "include",
-      ...(hasRevalidate ? { next } : { cache: cache ?? "no-store", next }),
+      cache,
+      next,
     });
-    const status = res.status;
 
+    const json = (await res.json()) as APIResponse<T>;
     if (!res.ok) {
-      let msg = `HTTP ${status}`;
-      try {
-        const j = await res.json();
-        if (typeof j?.err === "string") msg = j.err;
-        else if (typeof j?.error === "string") msg = j.error;
-      } catch {
-        try {
-          msg = await res.text();
-        } catch {}
+      const message =
+        errorMessage ?? json?.message ?? `HTTP ${res.status}`;
+
+      if (throwOnError) {
+        throw new Error(message);
       }
-      return { status, err: msg || "Request failed" };
+
+      return {
+        success: false,
+        message,
+        data: null,
+      };
     }
 
-    const json = await res.json();
-
-    return json as APIResponse<T>;
+    return json;
   } catch (e: any) {
-    return { status: 0, err: e?.message ?? "Network error" };
+    // Network / CORS / timeout
+    return {
+      success: false,
+      message: e?.message ?? "Network error",
+      data: null,
+    };
   }
 }
+
 
 export const api = {
   get<T>(url: string, options?: RequestOptions): Promise<APIResponse<T>> {
