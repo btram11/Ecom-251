@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import * as React from "react";
+import { CartProvider } from "@entities/cart";
 // import { ErrorBoundary } from 'react-error-boundary';
 
 // import { MainErrorFallback } from '@/components/errors/main';
@@ -17,9 +18,11 @@ export default function AppProviders({
   const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      {process.env.DEV && <ReactQueryDevtools />}
-      {/* <Notifications /> */}
-      {children}
+      <CartProvider>
+        {process.env.DEV && <ReactQueryDevtools />}
+        {/* <Notifications /> */}
+        {children}
+      </CartProvider>
     </QueryClientProvider>
   );
 }

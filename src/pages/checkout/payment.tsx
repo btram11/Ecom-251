@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import {
   CheckoutSteps,
@@ -17,6 +17,7 @@ export function CheckoutPaymentPage() {
 
   const { groups, subtotal } = useCheckoutCart();
   const { shippingByGroup, paymentMethod, setPaymentMethod } = useCheckout();
+  const [isLoading, setIsLoading] = useState(false);
 
   const shippingFee = useMemo(() => {
     return groups.reduce((acc, g) => {
@@ -59,13 +60,62 @@ export function CheckoutPaymentPage() {
 
               <button
                 type="button"
-                className="rounded-md bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
-                onClick={() => {
-                  // TODO: call API create-order
-                  alert("Đặt hàng (demo). Nối API create-order ở đây nha.");
+                className="rounded-md bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                onClick={async () => {
+                  // Collect selected items from cart groups
+                  const items = groups
+                    .flatMap((g) => g.lines)
+                    .filter((l: any) => l.isSelected)
+                    .map((l) => ({
+                      productId: l.productId,
+                      quantity: l.qty,
+                    }));
+
+                  if (items.length === 0) {
+                    alert("Vui lòng chọn ít nhất một sản phẩm để tiếp tục.");
+                    return;
+                  }
+
+                  setIsLoading(true);
+                  try {
+                    // 1) Tạo order ở BE
+                    const orderRes = await fetch("http://localhost:8003/api/order", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      credentials: "include", 
+                      body: JSON.stringify({ items }),
+                    });
+                    if (!orderRes.ok) throw new Error("Tạo đơn thất bại");
+                    const orderJson = await orderRes.json();
+                    if (!orderJson.success) throw new Error(orderJson.message || "Tạo đơn thất bại");
+                    const orderId = orderJson.data?.id;
+                    if (!orderId) throw new Error("Không nhận được order id từ server");
+
+                    // 2) Tạo payment Momo bằng orderId vừa nhận
+                    const payRes = await fetch("http://localhost:8003/api/payment", {
+                      method: "POST",
+                      credentials: "include", 
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ orderId }),
+                    });
+                    if (!payRes.ok) throw new Error("Khởi tạo thanh toán thất bại");
+                    const payJson = await payRes.json();
+                    if (!payJson.success) throw new Error(payJson.message || "Khởi tạo thanh toán thất bại");
+                    const payUrl = payJson.data?.payUrl;
+                    if (!payUrl) throw new Error("Không nhận được payUrl từ server");
+
+                    // Redirect tới payUrl của Momo
+                    window.location.href = payUrl;
+                  } catch (err: any) {
+                    console.error(err);
+                    alert("Có lỗi xảy ra: " + (err?.message ?? String(err)));
+                  } finally {
+                    setIsLoading(false);
+                  }
                 }}
+                disabled={isLoading}
               >
-                Tiếp tục
+                {isLoading ? "Đang xử lý..." : "Tiếp tục"}
               </button>
             </div>
           </div>

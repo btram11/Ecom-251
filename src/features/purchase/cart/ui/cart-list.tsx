@@ -5,7 +5,7 @@ import type { CheckedState } from "@radix-ui/react-checkbox";
 
 import { Button } from "@shared/ui/button";
 import { formatCurrency } from "@/shared/utils/format";
-import { useCartList } from "@entities/cart/model/use-cart-list";
+import { useCartListContext } from "@entities/cart";
 import { Checkbox } from "@shared/ui/form";
 
 import { CartItemGroup } from "@entities/cart";
@@ -29,7 +29,7 @@ export function CartList() {
     toggleAll,
     toggleGroupSelection,
     removeSelected,
-  } = useCartList();
+  } = useCartListContext();
 
   const headerChecked: CheckedState = allSelected
     ? true

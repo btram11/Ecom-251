@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import type { ICartItemGroup } from "@/entities/cart";
-import { useCartList } from "@/entities/cart";
+import { useCartListContext } from "@/entities/cart";
 
 function pickCheckoutGroups(groups: ICartItemGroup[]) {
   // Prefer group.isSelected; fallback: at least one line selected; fallback: keep all
@@ -22,7 +22,7 @@ function pickCheckoutGroups(groups: ICartItemGroup[]) {
 }
 
 export function useCheckoutCart() {
-  const { groups = [] } = useCartList() as { groups: ICartItemGroup[] };
+  const { groups = [] } = useCartListContext() as { groups: ICartItemGroup[] };
 
   const checkoutGroups = useMemo(() => pickCheckoutGroups(groups), [groups]);
 
