@@ -1,8 +1,8 @@
-import { Search, ShoppingCart, User } from "lucide-react";
-import { Button } from "@shared/ui/button";
-import { Input } from "@shared/ui/input";
-import { Badge } from "@shared/ui/badge";
-import Link from "next/link";
+import { Search, ShoppingCart, User } from 'lucide-react';
+import { Button } from '@shared/ui/button';
+import { Input } from '@shared/ui/input';
+import Link from 'next/link';
+import { CartCountBadge } from '@features/purchase/cart';
 
 function TopBar() {
   return (
@@ -15,10 +15,7 @@ function TopBar() {
     >
       <div className="container mx-auto px-4">
         <div className="h-8 text-xs flex items-center justify-between gap-4">
-          <nav
-            className="flex items-center gap-4"
-            aria-label="Liên kết tiện ích"
-          >
+          <nav className="flex items-center gap-4" aria-label="Liên kết tiện ích">
             <Link href="/seller" className="hover:text-foreground">
               Kênh người bán
             </Link>
@@ -65,28 +62,16 @@ export const Header = () => {
 
             {/* Navigation */}
             <nav className="hidden md:flex items-center gap-9 max-lg:gap-6">
-              <Link
-                href="/"
-                className="font-medium hover:text-success transition-colors"
-              >
+              <Link href="/" className="font-medium hover:text-success transition-colors">
                 Trang chủ
               </Link>
-              <Link
-                href="/products"
-                className="font-medium hover:text-success transition-colors"
-              >
+              <Link href="/products" className="font-medium hover:text-success transition-colors">
                 Danh mục
               </Link>
-              <Link
-                href="/orders"
-                className="font-medium hover:text-success transition-colors"
-              >
+              <Link href="/orders" className="font-medium hover:text-success transition-colors">
                 Đơn hàng
               </Link>
-              <Link
-                href="/about"
-                className="font-medium hover:text-success transition-colors"
-              >
+              <Link href="/about" className="font-medium hover:text-success transition-colors">
                 Về chúng tôi
               </Link>
             </nav>
@@ -108,9 +93,7 @@ export const Header = () => {
               <Button asChild variant="ghost" size="icon" className="relative">
                 <Link href="/cart" className="relative">
                   <ShoppingCart className="h-5 w-5" />
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-success">
-                    2
-                  </Badge>
+                  <CartCountBadge />
                 </Link>
               </Button>
 
