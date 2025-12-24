@@ -15,14 +15,15 @@ export const ORDER_TABS: OrderTab[] = [
   "Đã hủy",
 ];
 
-const tabToStatus: Record<Exclude<OrderTab, "Tất cả">, OrderStatus> = {
-  "Chờ xác nhận": "pending",
-  "Đang giao": "shipping",
-  "Đã giao": "delivered",
-  "Đã hủy": "cancelled",
+const tabToStatus: Record<Exclude<OrderTab, "Tất cả">, OrderStatus[]> = {
+  "Chờ xác nhận": ["waiting", "WAITING"],
+  "Đang giao": ["shipping", "DELIVERING"],
+  "Đã giao": ["delivered", "DELIVERED"],
+  "Đã hủy": ["cancelled", "CANCELLED"],
 };
 
 export function filterOrdersByTab(orders: Order[], tab: OrderTab) {
   if (tab === "Tất cả") return orders;
-  return orders.filter((o) => o.status === tabToStatus[tab]);
+  const statuses = tabToStatus[tab];
+  return orders.filter((o) => statuses.includes(o.orderStatus));
 }

@@ -35,92 +35,45 @@ import {
   Phone,
   Home,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getSellerOrders, type Order } from "@/entities/order";
+import { ORDER_STATUS_META } from "@/entities/order/model/status";
 
 export default function SellerPage() {
-  // Sample order data
-  const orders = [
-    {
-      id: "#ORD-2024-001",
-      customer: "Nguyễn Văn A",
-      phone: "0987 654 321",
-      address: "123 Đường ABC, Phường XYZ, Quận 1, TP.HCM",
-      date: "2024-12-20",
-      total: 250000,
-      status: "pending",
-      statusText: "Chờ xác nhận",
-      items: ["Rau muống sạch", "Cà rốt Đà Lạt"],
-      payment: "COD",
-    },
-    {
-      id: "#ORD-2024-002",
-      customer: "Trần Thị B",
-      phone: "0978 123 456",
-      address: "456 Đường DEF, Phường UVW, Quận 2, TP.HCM",
-      date: "2024-12-19",
-      total: 180000,
-      status: "preparing",
-      statusText: "Đang chuẩn bị",
-      items: ["Cà phê Cầu Đất", "Mật ong rừng"],
-      payment: "Chuyển khoản",
-    },
-    {
-      id: "#ORD-2024-005",
-      customer: "Hoàng Văn E",
-      phone: "0965 789 012",
-      address: "789 Đường GHI, Phường RST, Quận 3, TP.HCM",
-      date: "2024-12-16",
-      total: 275000,
-      status: "ready",
-      statusText: "Sẵn sàng giao",
-      items: ["Gạo ST25", "Đường phèn"],
-      payment: "COD",
-    },
-    {
-      id: "#ORD-2024-003",
-      customer: "Lê Văn C",
-      phone: "0955 234 567",
-      address: "321 Đường JKL, Phường MNO, Quận 4, TP.HCM",
-      date: "2024-12-18",
-      total: 320000,
-      status: "shipped",
-      statusText: "Đã giao",
-      items: ["Trái cây organic", "Thịt gà sạch"],
-      payment: "COD",
-    },
-    {
-      id: "#ORD-2024-004",
-      customer: "Phạm Thị D",
-      phone: "0944 345 678",
-      address: "654 Đường PQR, Phường STU, Quận 5, TP.HCM",
-      date: "2024-12-17",
-      total: 95000,
-      status: "delivered",
-      statusText: "Hoàn thành",
-      items: ["Trứng gà thả vườn"],
-      payment: "Chuyển khoản",
-    },
-    {
-      id: "#ORD-2024-006",
-      customer: "Đỗ Thị F",
-      phone: "0933 456 789",
-      address: "987 Đường VWX, Phường YZA, Quận 6, TP.HCM",
-      date: "2024-12-15",
-      total: 410000,
-      status: "cancelled",
-      statusText: "Đã hủy",
-      items: ["Củ quả Đà Lạt", "Gia vị tự nhiên"],
-      payment: "COD",
-    },
-  ];
+  // State management
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
 
   // Modal state
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const [orderToCancel, setOrderToCancel] = useState<any>(null);
+  const [orderToCancel, setOrderToCancel] = useState<Order | null>(null);
   const [cancelReason, setCancelReason] = useState<string>("");
   const [isValidComplaint, setIsValidComplaint] = useState<boolean>(false);
+
+  // Fetch orders on mount
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getSellerOrders();
+        setOrders(data);
+      } catch (err) {
+        setError("Không thể tải đơn hàng. Vui lòng thử lại.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   const openOrderDetail = (order: any) => {
     setSelectedOrder(order);
@@ -150,85 +103,104 @@ export default function SellerPage() {
     closeCancelModal();
   };
 
-  const getStatusBadge = (status: string) => {
+  // Helper functions
+  const getStatusValue = (status: string): string => {
     switch (status) {
-      case "pending":
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-yellow-100 text-yellow-800 border-yellow-200"
-          >
-            Chờ xác nhận
-          </Badge>
-        );
-      case "preparing":
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-blue-100 text-blue-800 border-blue-200"
-          >
-            Đang chuẩn bị
-          </Badge>
-        );
-      case "ready":
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-orange-100 text-orange-800 border-orange-200"
-          >
-            Sẵn sàng giao
-          </Badge>
-        );
-      case "shipped":
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-purple-100 text-purple-800 border-purple-200"
-          >
-            Đã giao
-          </Badge>
-        );
-      case "delivered":
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-green-100 text-green-800 border-green-200"
-          >
-            Hoàn thành
-          </Badge>
-        );
-      case "cancelled":
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-red-100 text-red-800 border-red-200"
-          >
-            Đã hủy
-          </Badge>
-        );
+      case "WAITING":
+        return "pending";
+      case "DELIVERING":
+        return "shipped";
+      case "DELIVERED":
+        return "delivered";
+      case "CANCELLED":
+        return "cancelled";
       default:
-        return <Badge variant="secondary">Không xác định</Badge>;
+        return status.toLowerCase();
     }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const meta = ORDER_STATUS_META[status as any] || ORDER_STATUS_META.WAITING;
+    return (
+      <Badge
+        variant="secondary"
+        className={meta.badgeClass}
+      >
+        {meta.label}
+      </Badge>
+    );
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
+      case "WAITING":
       case "pending":
         return <Clock className="h-4 w-4" />;
-      case "preparing":
-        return <Package className="h-4 w-4" />;
-      case "ready":
-        return <Truck className="h-4 w-4" />;
+      case "DELIVERING":
       case "shipped":
         return <Truck className="h-4 w-4" />;
+      case "DELIVERED":
       case "delivered":
         return <CheckCircle className="h-4 w-4" />;
+      case "CANCELLED":
       case "cancelled":
         return <XCircle className="h-4 w-4" />;
       default:
         return <Clock className="h-4 w-4" />;
     }
   };
+
+  // Filter and sort orders
+  const filteredAndSortedOrders = orders
+    .filter((order) => {
+      // Filter by status
+      if (filterStatus !== "all" && order.orderStatus !== filterStatus) {
+        return false;
+      }
+      // Filter by search term
+      if (
+        searchTerm &&
+        !order.id.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !order.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        case "oldest":
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+        case "highest":
+          return b.pick_money - a.pick_money;
+        case "lowest":
+          return a.pick_money - b.pick_money;
+        default:
+          return 0;
+      }
+    });
+
+  // Calculate statistics from real data
+  const stats = {
+    waiting: orders.filter((o) => o.orderStatus === "WAITING").length,
+    preparing: orders.filter((o) => o.orderStatus === "DELIVERING").length,
+    delivered: orders.filter((o) => o.orderStatus === "DELIVERED").length,
+    revenue: orders.reduce((sum, o) => sum + o.pick_money, 0),
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <p className="text-center text-gray-500">Đang tải đơn hàng...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -255,7 +227,7 @@ export default function SellerPage() {
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">5</div>
+                <div className="text-2xl font-bold">{stats.waiting}</div>
                 <p className="text-xs text-muted-foreground">
                   Đơn hàng chờ xác nhận
                 </p>
@@ -265,14 +237,14 @@ export default function SellerPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Đang chuẩn bị
+                  Đang giao
                 </CardTitle>
-                <Package className="h-4 w-4 text-muted-foreground" />
+                <Truck className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">3</div>
+                <div className="text-2xl font-bold">{stats.preparing}</div>
                 <p className="text-xs text-muted-foreground">
-                  Đơn hàng đang chuẩn bị
+                  Đơn hàng đang giao
                 </p>
               </CardContent>
             </Card>
@@ -283,7 +255,7 @@ export default function SellerPage() {
                 <CheckCircle className="h-6 w-6 text-deep-purple-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">42</div>
+                <div className="text-2xl font-bold">{stats.delivered}</div>
                 <p className="text-xs text-muted-foreground">
                   Đơn hàng đã giao thành công
                 </p>
@@ -296,9 +268,11 @@ export default function SellerPage() {
                 <DollarSign className="h-6 w-6 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">2.5M</div>
+                <div className="text-2xl font-bold">
+                  {(stats.revenue / 1000000).toFixed(1)}M
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  Tổng doanh thu tháng này
+                  Tổng doanh thu
                 </p>
               </CardContent>
             </Card>
@@ -321,31 +295,32 @@ export default function SellerPage() {
                 <Input
                   placeholder="Tìm kiếm theo mã đơn hàng, tên khách hàng..."
                   className="pl-10 h-11"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
 
             {/* Filter */}
             <div className="w-full md:w-48">
-              <Select>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
                 <SelectTrigger className="h-11">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Lọc theo trạng thái" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tất cả trạng thái</SelectItem>
-                  <SelectItem value="pending">Chờ xác nhận</SelectItem>
-                  <SelectItem value="preparing">Đang chuẩn bị</SelectItem>
-                  <SelectItem value="shipped">Đã giao</SelectItem>
-                  <SelectItem value="delivered">Hoàn thành</SelectItem>
-                  <SelectItem value="cancelled">Đã hủy</SelectItem>
+                  <SelectItem value="WAITING">Chờ xác nhận</SelectItem>
+                  <SelectItem value="DELIVERING">Đang giao</SelectItem>
+                  <SelectItem value="DELIVERED">Đã giao</SelectItem>
+                  <SelectItem value="CANCELLED">Đã hủy</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {/* Sort */}
             <div className="w-full md:w-48">
-              <Select>
+              <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="h-11">
                   <ArrowUpDown className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Sắp xếp theo" />
@@ -364,7 +339,7 @@ export default function SellerPage() {
 
       {/* Orders List */}
       <div className="space-y-4">
-        {orders.map((order) => (
+        {filteredAndSortedOrders.map((order) => (
           <Card key={order.id} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
@@ -373,7 +348,7 @@ export default function SellerPage() {
                   <h3 className="font-semibold text-lg">{order.id}</h3>
                 </div>
                 {/* Status Badge - Same line as title */}
-                <div>{getStatusBadge(order.status)}</div>
+                <div>{getStatusBadge(order.orderStatus)}</div>
               </div>
 
               <div className="flex flex-col lg:flex-row justify-between gap-4">
@@ -382,23 +357,23 @@ export default function SellerPage() {
                   <div className="text-sm text-gray-600 mt-1 space-y-1">
                     <div>
                       <span className="font-medium">Khách hàng:</span>{" "}
-                      {order.customer}
+                      {order.name}
                     </div>
                     <div>
                       <span className="font-medium">Ngày đặt:</span>{" "}
-                      {order.date}
+                      {new Date(order.createdAt).toLocaleDateString("vi-VN")}
                     </div>
                   </div>
                   <div className="mt-2">
                     <span className="font-medium text-sm">Sản phẩm:</span>
                     <p className="text-sm text-gray-600 mt-1">
-                      {order.items.join(", ")}
+                      {order.items.map((item) => item.productName).join(", ")}
                     </p>
                   </div>
                   <div className="mt-3 pt-2 border-t border-gray-200">
                     <span className="font-medium text-sm">Tổng tiền:</span>
                     <span className="text-lg font-bold text-green-600 ml-1">
-                      {order.total.toLocaleString()}đ
+                      {order.pick_money.toLocaleString()}đ
                     </span>
                   </div>
                 </div>
@@ -418,7 +393,7 @@ export default function SellerPage() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 w-full lg:w-auto">
-                    {order.status === "pending" && (
+                    {order.orderStatus === "WAITING" && (
                       <>
                         <Button
                           variant="outline"
@@ -437,7 +412,7 @@ export default function SellerPage() {
                         </Button>
                       </>
                     )}
-                    {order.status === "preparing" && (
+                    {order.orderStatus === "DELIVERING" && (
                       <>
                         <Button
                           variant="outline"
@@ -447,31 +422,6 @@ export default function SellerPage() {
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
                           Huỷ đơn
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="bg-blue-600 hover:bg-blue-700 flex-1 lg:flex-none min-w-32"
-                        >
-                          Đã chuẩn bị xong
-                        </Button>
-                      </>
-                    )}
-                    {order.status === "ready" && (
-                      <>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 lg:flex-none border-red-300 text-red-600 hover:bg-red-400 hover:border-red-400"
-                          onClick={() => openCancelModal(order)}
-                        >
-                          <Trash2 className="h-4 w-4 mr-1" />
-                          Huỷ đơn
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="bg-orange-400 hover:bg-orange-600 flex-1 lg:flex-none min-w-32"
-                        >
-                          Bàn giao cho shipper
                         </Button>
                       </>
                     )}
@@ -482,6 +432,17 @@ export default function SellerPage() {
           </Card>
         ))}
       </div>
+
+      {/* Empty State */}
+      {filteredAndSortedOrders.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500">
+            {orders.length === 0
+              ? "Không có đơn hàng nào"
+              : "Không tìm thấy đơn hàng nào với tiêu chỉ định"}
+          </p>
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="flex justify-center mt-8">
@@ -540,15 +501,19 @@ export default function SellerPage() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div>
-                      <p className="text-gray-800">{selectedOrder.customer}</p>
+                      <p className="text-gray-800">{selectedOrder.name}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4 text-gray-500" />
-                      <p className="text-gray-800">{selectedOrder.phone}</p>
+                      <p className="text-gray-800">{selectedOrder.tel || "Không có"}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Home className="h-4 w-4 text-gray-500" />
-                      <p className="text-gray-800">{selectedOrder.address}</p>
+                      <p className="text-gray-800">
+                        {selectedOrder.address
+                          ? `${selectedOrder.address}, ${selectedOrder.district}, ${selectedOrder.province}`
+                          : `${selectedOrder.district}, ${selectedOrder.province}`}
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -562,41 +527,37 @@ export default function SellerPage() {
                           Sản phẩm đặt hàng
                         </CardTitle>
                         <span className="text-gray-500 text-sm">
-                          {selectedOrder.date}
+                          {new Date(selectedOrder.createdAt).toLocaleDateString("vi-VN")}
                         </span>
                       </div>
-                      <div>{getStatusBadge(selectedOrder.status)}</div>
+                      <div>{getStatusBadge(selectedOrder.orderStatus)}</div>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {selectedOrder.items.map(
-                        (item: string, index: number) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg"
-                          >
-                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                              <Package className="h-8 w-8 text-gray-400" />
-                            </div>
-                            <div className="flex-1">
-                              <h4 className="font-medium">{item}</h4>
-                              <p className="text-sm text-gray-500">
-                                Số lượng: 1
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="font-semibold text-green-600">
-                                {(
-                                  selectedOrder.total /
-                                  selectedOrder.items.length
-                                ).toLocaleString()}
-                                đ
-                              </p>
-                            </div>
+                      {selectedOrder.items.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg"
+                        >
+                          <img
+                            src={item.productImage || ""}
+                            alt={item.productName || ""}
+                            className="w-16 h-16 rounded-lg object-cover bg-gray-200"
+                          />
+                          <div className="flex-1">
+                            <h4 className="font-medium">{item.productName}</h4>
+                            <p className="text-sm text-gray-500">
+                              Số lượng: {item.quantity} {item.productUnit}
+                            </p>
                           </div>
-                        )
-                      )}
+                          <div className="text-right">
+                            <p className="font-semibold text-green-600">
+                              {item.finalPrice.toLocaleString()}đ
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
 
                     {/* Payment Method */}
@@ -606,22 +567,20 @@ export default function SellerPage() {
                           Phương thức thanh toán:
                         </span>
                         <span className="font-semibold">
-                          {selectedOrder.payment}
+                          {selectedOrder.orderStatus === "WAITING" ? "Chờ thanh toán" : "Đã thanh toán"}
                         </span>
                       </div>
                     </div>
 
-                    {/* Shipping & Savings */}
+                    {/* Shipping & Total */}
                     <div className="mt-4 space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Tiết kiệm:</span>
-                        <span className="text-green-600 font-medium">
-                          -5,000đ
-                        </span>
+                        <span className="text-gray-600">Phí vận chuyển:</span>
+                        <span className="font-medium">{selectedOrder.shippingFee.toLocaleString()}đ</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Phí vận chuyển:</span>
-                        <span className="font-medium">25,000đ</span>
+                        <span className="text-gray-600">Tổng sản phẩm:</span>
+                        <span className="font-medium">{selectedOrder.totalProductPrice.toLocaleString()}đ</span>
                       </div>
                     </div>
                   </CardContent>
@@ -633,7 +592,7 @@ export default function SellerPage() {
                     <div className="flex justify-between items-center text-lg">
                       <span className="font-medium">Tổng tiền:</span>
                       <span className="font-bold text-green-600">
-                        {selectedOrder.total.toLocaleString()}đ
+                        {selectedOrder.pick_money.toLocaleString()}đ
                       </span>
                     </div>
                   </CardContent>
@@ -644,19 +603,9 @@ export default function SellerPage() {
                   <Button variant="outline" onClick={closeModal}>
                     Đóng
                   </Button>
-                  {selectedOrder.status === "pending" && (
+                  {selectedOrder.orderStatus === "WAITING" && (
                     <Button className="bg-green-600 hover:bg-green-700">
                       Xác nhận đơn
-                    </Button>
-                  )}
-                  {selectedOrder.status === "preparing" && (
-                    <Button className="bg-blue-600 hover:bg-blue-700">
-                      Đã chuẩn bị xong
-                    </Button>
-                  )}
-                  {selectedOrder.status === "ready" && (
-                    <Button className="bg-orange-400 hover:bg-orange-600">
-                      Bàn giao cho shipper
                     </Button>
                   )}
                 </div>
@@ -688,21 +637,23 @@ export default function SellerPage() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Khách hàng:</span>
-                  <span className="font-medium">{orderToCancel.customer}</span>
+                  <span className="font-medium">{orderToCancel.name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Số điện thoại:</span>
-                  <span className="font-medium">{orderToCancel.phone}</span>
+                  <span className="font-medium">{orderToCancel.tel || "Không có"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tổng tiền:</span>
                   <span className="font-medium text-green-600 text-lg">
-                    {orderToCancel.total.toLocaleString()}đ
+                    {orderToCancel.pick_money.toLocaleString()}đ
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Phương thức thanh toán:</span>
-                  <span className="font-medium">{orderToCancel.payment}</span>
+                  <span className="font-medium">
+                    {orderToCancel.orderStatus === "WAITING" ? "Chờ thanh toán" : "Đã thanh toán"}
+                  </span>
                 </div>
               </div>
             </div>

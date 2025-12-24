@@ -1,37 +1,41 @@
-import type { LucideIcon } from "lucide-react";
-import { Truck, CheckCircle, XCircle, Clock } from "lucide-react";
 import type { OrderStatus } from "./types";
 
 export type StatusMeta = {
   label: string;
   badgeClass: string;
-  Icon: LucideIcon;
-  iconClass: string;
 };
 
 export const ORDER_STATUS_META: Record<OrderStatus, StatusMeta> = {
-  pending: {
+  waiting: {
     label: "Chờ xác nhận",
-    badgeClass: "text-amber-700 bg-amber-100",
-    Icon: Clock,
-    iconClass: "text-amber-600",
+    badgeClass: "bg-yellow-100 text-yellow-800",
+  },
+  WAITING: {
+    label: "Chờ xác nhận",
+    badgeClass: "bg-yellow-100 text-yellow-800",
   },
   shipping: {
     label: "Đang giao",
-    badgeClass: "text-purple-700 bg-purple-100",
-    Icon: Truck,
-    iconClass: "text-purple-600",
+    badgeClass: "bg-blue-100 text-blue-800",
+  },
+  DELIVERING: {
+    label: "Đang giao",
+    badgeClass: "bg-blue-100 text-blue-800",
   },
   delivered: {
     label: "Đã giao",
-    badgeClass: "text-green-700 bg-green-100",
-    Icon: CheckCircle,
-    iconClass: "text-green-600",
+    badgeClass: "bg-green-100 text-green-800",
+  },
+  DELIVERED: {
+    label: "Đã giao",
+    badgeClass: "bg-green-100 text-green-800",
   },
   cancelled: {
     label: "Đã hủy",
-    badgeClass: "text-gray-700 bg-gray-100",
-    Icon: XCircle,
-    iconClass: "text-gray-500",
+    badgeClass: "bg-red-100 text-red-800",
+  },
+  CANCELLED: {
+    label: "Đã hủy",
+    badgeClass: "bg-red-100 text-red-800",
   },
 };
