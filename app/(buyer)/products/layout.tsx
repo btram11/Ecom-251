@@ -1,16 +1,17 @@
-import { CartSidebar } from '@features/purchase/cart';
-import { isValid } from '@shared/lib/auth/check-auth';
+// import { CartSidebar } from "../../../temp/components/cart-sidebar";
+import { CartSidebar } from "@features/purchase/cart";
 
-export default async function ProductsLayout({ children }: { children: React.ReactNode }) {
-  const { authenticated } = await isValid();
+export default function ProductsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative">
       {children}
-      {authenticated && (
-        <section className="fixed right-0 top-3">
-          <CartSidebar />
-        </section>
-      )}
+      <section className="fixed right-0 top-3">
+        <CartSidebar />
+      </section>
     </div>
   );
 }

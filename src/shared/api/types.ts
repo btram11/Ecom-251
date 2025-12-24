@@ -4,10 +4,10 @@ export type ApiSuccess<T> = {
   data: T;
 };
 
-export type ApiError<T = any> = {
+export type ApiError = {
   success: false;
   message: string;
-  data: T;
+  data: null;
 };
 
 export type APIResponse<T> = ApiSuccess<T> | ApiError;
