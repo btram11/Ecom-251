@@ -8,7 +8,8 @@ export async function isValid() {
   if (!token) return { authenticated: false as const };
 
   const res = await fetch(apiUrl(paths.auth.me), {
-    headers: { Authorization: `Bearer ${token}` },
+    method: 'GET',
+    headers: { Cookie: `accessToken=${token}` },
     next: { revalidate: 30 },
   });
 

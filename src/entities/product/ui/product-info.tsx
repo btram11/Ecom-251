@@ -1,7 +1,7 @@
-import { MapPin, Truck, Leaf, Clock } from "lucide-react";
-import type { Product } from "../model/types";
-import { RatingStar } from "@/shared/ui/rating-star";
-import { formatCurrency } from "@shared/utils/format";
+import { MapPin, Truck, Leaf, Clock } from 'lucide-react';
+import type { Product } from '../model/types';
+import { RatingStar } from '@/shared/ui/rating-star';
+import { formatCurrency } from '@shared/utils/format';
 
 export function ProductInfo({ product }: { product: Product }) {
   return (
@@ -11,10 +11,8 @@ export function ProductInfo({ product }: { product: Product }) {
       <div className="flex items-center gap-2">
         <RatingStar rating={product.avgRating} />
         <p className="font-medium text-gray-700">
-          {product.avgRating}{" "}
-          <span className="text-sm text-gray-500">
-            ({product.reviewCount} đánh giá)
-          </span>
+          {product.avgRating}{' '}
+          <span className="text-sm text-gray-500">({product.reviewCount} đánh giá)</span>
         </p>
       </div>
 
@@ -28,8 +26,7 @@ export function ProductInfo({ product }: { product: Product }) {
           <span className="font-medium">Xuất xứ:</span> {product.origin}
         </p>
         <p>
-          <span className="font-medium">Ngày thu hoạch:</span>{" "}
-          {product.harvestDateISO}
+          <span className="font-medium">Ngày thu hoạch:</span> {product.harvestDateISO}
         </p>
         <p>
           <span className="font-medium">Còn lại:</span> {product.stockKg} kg
@@ -37,8 +34,7 @@ export function ProductInfo({ product }: { product: Product }) {
       </div>
 
       <p className="text-green-600 text-2xl font-semibold">
-        {formatCurrency(product.priceVndPerKg)}{" "}
-        <span className="text-base text-gray-600">/kg</span>
+        {formatCurrency(product.price)} <span className="text-base text-gray-600">/kg</span>
       </p>
 
       <div className="flex flex-wrap gap-3 pt-3">

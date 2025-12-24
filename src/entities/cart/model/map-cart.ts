@@ -1,8 +1,10 @@
-import { getProductById } from "@/entities/product/api/get-product";
-import type { ICartItemGroup } from "@/entities/cart";
-import { CartItemResponse } from "../api/types";
+import { getProductById } from '@/entities/product/api/get-product';
+import type { ICartItemGroup } from '@/entities/cart';
+import { CartItemResponse } from '../api/types';
 
 export async function mapCartToGroups(cartItems: CartItemResponse[]): Promise<ICartItemGroup[]> {
+  if (!Array.isArray(cartItems)) return [];
+
   const groups: Record<string, ICartItemGroup> = {};
 
   for (const item of cartItems) {
@@ -12,20 +14,20 @@ export async function mapCartToGroups(cartItems: CartItemResponse[]): Promise<IC
       groups[item.sellerId] = {
         id: item.sellerId,
         sellerId: item.sellerId,
-        sellerName: item.sellerName ?? "Người bán",
+        sellerName: item.sellerName ?? 'Người bán',
         lines: [],
         isSelected: false,
       };
     }
 
     groups[item.sellerId].lines.push({
-        id: `${item.sellerId}-${item.productId}`,
-        name: product?.name ?? "Sản phẩm",
-        imageUrl: product?.images?.[0] || "/placeholder.png",
-        price: product?.priceVndPerKg || 0,
-        qty: 1,
-        isSelected: false,
-        sellerId: ""
+      id: `${item.sellerId}-${item.productId}`,
+      name: product?.name ?? 'Sản phẩm',
+      imageUrl: product?.images?.[0] || '/placeholder.png',
+      price: product?.priceVndPerKg || 0,
+      qty: 1,
+      isSelected: false,
+      sellerId: '',
     });
   }
 
