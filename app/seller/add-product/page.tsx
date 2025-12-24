@@ -17,7 +17,7 @@ import {
 } from "@shared/ui/form";
 import { Label } from "@shared/ui/form";
 import { Checkbox } from "@shared/ui/form";
-import { Upload, Save, X, Star, Tag } from "lucide-react";
+import { Upload, Save, X, Star, Tag ,Trash2} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { environment } from "../../../environment";
@@ -29,7 +29,11 @@ type Category = {
   imageType: string;
 };
 
-
+type ProductImage = {
+  id: string; // Dùng timestamp làm ID tạm
+  base64: string;
+  type: string;
+};
 
 export default function AddProductPage() {
   const router = useRouter();
@@ -41,7 +45,7 @@ export default function AddProductPage() {
   const [discount, setDiscount] = useState("");
   const [rating, setRating] = useState("");
   const [location, setLocation] = useState("");
-
+  const [images, setImages] = useState<ProductImage[]>([]);
   const [imageBase64, setImageBase64] = useState<string>("");
   const [imageType, setImageType] = useState<string>("");
 
@@ -64,6 +68,12 @@ export default function AddProductPage() {
 
 
   const handleImageUpload = (file: File) => {
+    // Kiểm tra số lượng ảnh (Max 6: 1 chính + 5 phụ)
+    if (images.length >= 6) {
+      alert("Bạn chỉ được đăng tối đa 6 ảnh");
+      return;
+    }
+
     if (!file.type.startsWith("image/")) {
       alert("Vui lòng chọn file ảnh");
       return;
@@ -77,10 +87,21 @@ export default function AddProductPage() {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64 = (reader.result as string).split(",")[1];
-      setImageBase64(base64);
-      setImageType(file.type);
+      const newImage: ProductImage = {
+        id: Date.now().toString(), // Tạo ID ngẫu nhiên
+        base64: base64,
+        type: file.type,
+      };
+      
+      // Thêm ảnh mới vào danh sách hiện có
+      setImages((prev) => [...prev, newImage]);
     };
     reader.readAsDataURL(file);
+  };
+
+  // Hàm xóa ảnh
+  const removeImage = (indexToRemove: number) => {
+    setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
 
@@ -104,8 +125,8 @@ export default function AddProductPage() {
       discount: Number(discount) || 0,
       rating: Number(rating) || 5,
       location,
-      imageBlobString: imageBase64,
-      imageType,
+      imageBlobString: images[0].base64, 
+      imageType: images[0].type,
     };
 
     try {
@@ -141,74 +162,110 @@ export default function AddProductPage() {
           </p>
         </div>
 
-        {/* Product Images Card */}
+{/* Product Images Card */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Upload className="h-5 w-5" />
-              Hình ảnh sản phẩm
+              Hình ảnh sản phẩm ({images.length}/6)
             </CardTitle>
             <CardDescription>
-              Thêm tối thiểu 5 hình ảnh sản phẩm. Hình ảnh đầu tiên được chọn
-              làm ảnh chính.
+              Ảnh đầu tiên sẽ là ảnh chính. Các ảnh tiếp theo sẽ tự động điền vào ô trống.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-8">
             <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
-              {/* Main image indicator */}
-              <div className="relative group">
-                <label className="aspect-square border-2 border-primary border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200">
-                  <Upload className="h-10 w-10 text-primary mb-3" />
-                  <span className="text-sm text-primary font-medium">Ảnh chính</span>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    Click để thêm
-                  </span>
-                  
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        handleImageUpload(e.target.files[0]);
-                      }
-                    }}
-                  />
-                </label>
-                {imageBase64 && (
-                  <div className="mt-6 flex justify-center">
+              
+              {/* --- VỊ TRÍ 1: ẢNH CHÍNH (Index 0) --- */}
+              <div className="relative group col-span-1 md:col-span-1">
+                 {/* Logic: Nếu có ảnh ở vị trí 0 thì hiện ảnh, không thì hiện nút upload */}
+                 {images[0] ? (
+                  <div className="aspect-square rounded-xl border-2 border-primary overflow-hidden relative">
                     <img
-                      src={`data:${imageType};base64,${imageBase64}`}
-                      alt="Preview"
-                      className="h-40 rounded-lg border"
+                      src={`data:${images[0].type};base64,${images[0].base64}`}
+                      alt="Main"
+                      className="w-full h-full object-cover"
                     />
+                    {/* Nút xóa ảnh */}
+                    <button
+                      onClick={() => removeImage(0)}
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                    <div className="absolute bottom-0 left-0 right-0 bg-primary/80 text-white text-xs py-1 text-center">
+                      Ảnh chính
+                    </div>
                   </div>
+                ) : (
+                  <label className="aspect-square border-2 border-primary border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-primary/5 transition-all">
+                    <Upload className="h-10 w-10 text-primary mb-3" />
+                    <span className="text-sm text-primary font-medium">Thêm ảnh</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                    />
+                  </label>
                 )}
-
-                <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-2 shadow-lg">
+                
+                {/* Icon Ngôi sao trang trí */}
+                <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-2 shadow-lg z-10 pointer-events-none">
                   <Star className="h-4 w-4" />
                 </div>
               </div>
 
-              {/* Additional images */}
-              {[...Array(5)].map((_, index) => (
-                <div
-                  key={index}
-                  className="aspect-square border-2 border-dashed border-muted-foreground/25 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-muted-foreground/50 hover:bg-muted/50 transition-all duration-200"
-                >
-                  <Upload className="h-8 w-8 text-muted-foreground mb-3" />
-                  <span className="text-sm text-muted-foreground text-center">
-                    Ảnh {index + 2}
-                  </span>
-                </div>
-              ))}
-            </div>
-            
+              {/* --- VỊ TRÍ 2 ĐẾN 6: CÁC ẢNH PHỤ --- */}
+              {/* Tạo mảng 5 phần tử để render 5 ô còn lại */}
+              {[...Array(5)].map((_, i) => {
+                const index = i + 1; // Vị trí thực trong mảng images (1, 2, 3, 4, 5)
+                const hasImage = index < images.length; // Kiểm tra xem vị trí này đã có ảnh chưa
 
+                return (
+                  <div key={index} className="relative group">
+                    {hasImage ? (
+                      // TRƯỜNG HỢP: ĐÃ CÓ ẢNH TẠI VỊ TRÍ NÀY
+                      <div className="aspect-square rounded-xl border border-gray-200 overflow-hidden relative">
+                        <img
+                          src={`data:${images[index].type};base64,${images[index].base64}`}
+                          alt={`Gallery ${index}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          onClick={() => removeImage(index)}
+                          className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ) : (
+                      // TRƯỜNG HỢP: Ô TRỐNG
+                      <label 
+                        className={`aspect-square border-2 border-dashed border-muted-foreground/25 rounded-xl flex flex-col items-center justify-center transition-all duration-200
+                        ${images.length === index ? 'cursor-pointer hover:border-primary hover:bg-primary/5' : 'cursor-not-allowed opacity-50'}`}
+                      >
+                        <Upload className="h-8 w-8 text-muted-foreground mb-3" />
+                        <span className="text-sm text-muted-foreground">Ảnh {index + 1}</span>
+                        
+                        {/* Chỉ cho phép click upload vào ô trống TIẾP THEO liền kề */}
+                        {images.length === index && (
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                          />
+                        )}
+                      </label>
+                    )}
+                  </div>
+                );
+              })}
+
+            </div>
             <p className="text-sm text-muted-foreground mt-6 text-center">
-              💡 Mẹo: Sử dụng ảnh chất lượng cao, chụp từ nhiều góc độ để sản
-              phẩm được hiển thị đẹp nhất.
+              💡 Mẹo: Bạn có thể xóa ảnh bằng cách di chuột vào ảnh và nhấn nút xóa.
             </p>
           </CardContent>
         </Card>
@@ -350,7 +407,7 @@ export default function AddProductPage() {
 
             <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
               <div className="flex items-start space-x-3">
-                <Checkbox id="certification" className="mt-1" />
+                <Checkbox id="certification" className="mt-0.1" />
                 <div className="space-y-2">
                   <Label
                     htmlFor="certification"
