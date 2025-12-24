@@ -54,6 +54,7 @@ export function CartItem({
                 fill
                 sizes="192px"
                 className="object-cover"
+                unoptimized={item.imageUrl.startsWith("http://localhost")}
               />
             </div>
 
@@ -131,6 +132,7 @@ export function CartItem({
               alt={item.name}
               fill
               className="object-cover"
+              unoptimized={item.imageUrl.startsWith("http://localhost")}
             />
           </div>
 

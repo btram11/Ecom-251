@@ -2,17 +2,9 @@ import { Card } from "@shared/ui/card";
 import { Star, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { ProductCardData } from "@entities/product/model/types";
 
-export interface ProductCardProps {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  rating?: number;
-  reviews?: number;
-  location: string;
-
+export interface ProductCardProps extends ProductCardData {
   action?: React.ReactNode;
 }
 
@@ -37,6 +29,7 @@ export const ProductCard = ({
             alt={name}
             width={200}
             height={200}
+            unoptimized={image.startsWith("http://localhost")}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         </div>

@@ -31,8 +31,58 @@ import {
   Minus,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { environment } from "../../../environment";
+
+type SellerProduct = {
+  id: number;
+  name: string;
+  baseUnit: string;
+  imageUrl: string;
+  price: number;
+  discount: number;
+  rating: number;
+  location: string;
+  categoryNames: string[];
+};
+
 
 export default function ProductsPage() {
+
+  const [products, setProducts] = useState<SellerProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          `${environment.SERVICE_URL}/api/products/seller`,
+          {
+            credentials: "include", 
+            cache: "no-store",
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch seller products");
+        }
+
+        const json = await res.json();
+
+        if (json.success) {
+          setProducts(json.data.content);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+
   const router = useRouter();
   return (
     <div className="container mx-auto px-4 py-8">
@@ -146,201 +196,76 @@ export default function ProductsPage() {
       {/* Product Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {/* Sample Product Cards */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center">
-              <Package className="h-12 w-12 text-muted-foreground" />
-            </div>
-            <CardTitle className="text-lg">Rau muống tươi</CardTitle>
-            <CardDescription>Rau muống xanh tươi, vừa hái</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">
-                  25,000đ
-                </span>
-                <span className="text-sm text-muted-foreground">/kg</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Tồn kho:</span>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">
-                    50
-                  </span>
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-green-600 font-medium">Đang bán</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {loading ? (
+          <p>Đang tải sản phẩm...</p>
+        ) : (
+          products.map((product) => {
+            const finalPrice =
+              product.price - (product.price * product.discount) / 100;
 
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center">
-              <Package className="h-12 w-12 text-muted-foreground" />
-            </div>
-            <CardTitle className="text-lg">Cà rốt Đà Lạt</CardTitle>
-            <CardDescription>Cà rốt tươi ngon từ Đà Lạt</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">
-                  35,000đ
-                </span>
-                <span className="text-sm text-muted-foreground">/kg</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Tồn kho:</span>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">
-                    30
-                  </span>
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-orange-600 font-medium">Hết hàng</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            return (
+              <Card key={product.id}>
+                <CardHeader className="pb-3">
+                  <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                    {product.imageUrl ? (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <Package className="h-12 w-12 text-muted-foreground" />
+                    )}
+                  </div>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center">
-              <Package className="h-12 w-12 text-muted-foreground" />
-            </div>
-            <CardTitle className="text-lg">Tỏi Lý Sơn</CardTitle>
-            <CardDescription>Tỏi Lý Sơn thơm ngon</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">
-                  120,000đ
-                </span>
-                <span className="text-sm text-muted-foreground">/kg</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Tồn kho:</span>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">
-                    15
-                  </span>
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-green-600 font-medium">Đang bán</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                  <CardTitle className="text-lg">{product.name}</CardTitle>
+                  <CardDescription>
+                    {product.categoryNames.join(", ")}
+                  </CardDescription>
+                </CardHeader>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="aspect-square bg-muted rounded-lg mb-3 flex items-center justify-center">
-              <Package className="h-12 w-12 text-muted-foreground" />
-            </div>
-            <CardTitle className="text-lg">Ớt hiểm tươi</CardTitle>
-            <CardDescription>Ớt hiểm cay nồng từ vườn</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-green-600">
-                  45,000đ
-                </span>
-                <span className="text-sm text-muted-foreground">/kg</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Tồn kho:</span>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="text-lg font-semibold min-w-12 text-center">
-                    8
-                  </span>
-                  <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600 font-medium">Đã ẩn</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                <CardContent>
+                  <div className="space-y-3">
+                    {/* Price */}
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-green-600">
+                        {finalPrice.toLocaleString()}đ
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        /{product.baseUnit.toLowerCase()}
+                      </span>
+                    </div>
+
+                    {/* Location */}
+                    <div className="text-sm text-muted-foreground">
+                      📍 {product.location}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex justify-between text-sm">
+                      <span className="text-green-600 font-medium">
+                        Đang bán
+                      </span>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+
       </div>
     </div>
   );

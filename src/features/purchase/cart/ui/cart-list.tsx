@@ -132,10 +132,10 @@ export function CartList() {
                       lines={group.lines}
                       checked={groupChecked}
                       onToggleGroup={() => toggleGroupSelection(group.id)}
-                      onToggleItem={(itemId) => toggleItemSelect(itemId)}
-                      onIncrease={(itemId) => increase(itemId)}
-                      onDecrease={(itemId) => decrease(itemId)}
-                      onRemove={(itemId) => remove(itemId)}
+                      onToggleItem={(itemId) => toggleItemSelect(String(itemId))}
+                      onIncrease={(itemId) => increase(String(itemId))}
+                      onDecrease={(itemId) => decrease(String(itemId))}
+                      onRemove={(itemId) => remove(String(itemId))}
                     />
                   );
                 })}

@@ -13,3 +13,12 @@ export type CartLine = {
   qty: number;
   imageUrl: string;
 };
+
+
+export type CartApiItem = {
+  buyerId: string;
+  sellerId: string;
+  productId: number;
+  amount: number;
+  sellerName: string | null;
+};

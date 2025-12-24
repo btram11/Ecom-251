@@ -12,6 +12,7 @@ export function PackageItem({ item }: { item: ICartItem }) {
             alt={item.name}
             fill
             className="object-cover"
+            unoptimized={item.imageUrl.startsWith("http://localhost")}
           />
         </div>
 

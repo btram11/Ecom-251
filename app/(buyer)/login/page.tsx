@@ -2,9 +2,24 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { environment } from "../../../environment";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [role, setRole] = useState<"BUYER" | "SELLER" | null>(null);
+
+  const handleGoogleSignIn = () => {
+    if (!role) {
+      alert("Vui lòng chọn vai trò của bạn trước khi đăng nhập.");
+      return;
+    }
+    const redirectUri = encodeURIComponent(`http://localhost:8003/api/auth/google/callback?role=${role}`);
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${environment.CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+
+    window.location.href = oauthUrl;
+  }
+
   return (
     <div className="min-h-screen flex flex-row bg-white">
       {/* --- BÊN TRÁI: ẢNH BANNER --- */}
@@ -34,18 +49,37 @@ export default function LoginPage() {
             Tôi là :
           </label>
           <div className="flex gap-6">
-            <button className="flex-1 py-3 border border-gray-300 rounded-xl font-bold text-gray-800 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition duration-200">
+            {/* <button className="flex-1 py-3 border border-gray-300 rounded-xl font-bold text-gray-800 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition duration-200">
               Người mua
             </button>
             <button className="flex-1 py-3 border border-gray-300 rounded-xl font-bold text-gray-800 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition duration-200">
+              Người bán
+            </button> */}
+            <button
+              aria-pressed={role === "BUYER"}
+              onClick={() => setRole("BUYER")}
+              className={`flex-1 py-3 rounded-xl font-bold transition duration-200 ${role === "BUYER" ? "border border-green-500 text-green-600 bg-green-50" : "border border-gray-300 text-gray-800 hover:border-green-500 hover:text-green-600 hover:bg-green-50"}`}
+            >
+              Người mua
+            </button>
+            <button
+              aria-pressed={role === "SELLER"}
+              onClick={() => setRole("SELLER")}
+              className={`flex-1 py-3 rounded-xl font-bold transition duration-200 ${role === "SELLER" ? "border border-green-500 text-green-600 bg-green-50" : "border border-gray-300 text-gray-800 hover:border-green-500 hover:text-green-600 hover:bg-green-50"}`}
+            >
               Người bán
             </button>
           </div>
         </div>
 
         {/* Nút Đăng nhập Google */}
-        <button className="w-full border border-gray-300 rounded-xl py-3 flex items-center justify-center gap-3 font-bold text-gray-800 hover:bg-gray-50 transition duration-200 mb-8"
+        {/* <button className="w-full border border-gray-300 rounded-xl py-3 flex items-center justify-center gap-3 font-bold text-gray-800 hover:bg-gray-50 transition duration-200 mb-8"
           onClick={() => router.push('/')}
+        > */}
+        <button
+          onClick={handleGoogleSignIn}
+          disabled={!role}
+          className={`w-full border rounded-xl py-3 flex items-center justify-center gap-3 font-bold transition duration-200 mb-8 ${!role ? "border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50" : "border-gray-300 text-gray-800 hover:bg-gray-50"}`}
         >
             {/* Icon Google SVG */}
             <svg className="w-6 h-6" viewBox="0 0 48 48">

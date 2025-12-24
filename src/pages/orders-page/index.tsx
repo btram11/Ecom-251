@@ -5,9 +5,9 @@ import type { Order } from "@/entities/order/model/types";
 import { OrderCard } from "@/entities/order/ui/order-card";
 import { OrderTabs } from "./filter/ui/order-tabs";
 import { filterOrdersByTab, type OrderTab } from "./filter/model/tabs";
-
 export function OrdersPage({ orders }: { orders: Order[] }) {
   const [activeTab, setActiveTab] = React.useState<OrderTab>("Tất cả");
+  const [openOrderId, setOpenOrderId] = React.useState<string | null>(null);
 
   const filtered = React.useMemo(() => {
     return filterOrdersByTab(orders, activeTab);
