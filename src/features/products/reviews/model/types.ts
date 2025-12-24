@@ -1,7 +1,7 @@
 export type Review = {
   id: string;
   name: string;
-  createdAt: string; // ISO string YYYY-MM-DD
+  date: string; // ISO string YYYY-MM-DD
   rating: number;
   comment: string;
 };
