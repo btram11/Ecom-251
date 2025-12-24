@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { type ICartItem as CartItem } from "@/entities/cart";
-import { formatCurrency } from "@/shared/utils/format";
-import { Checkbox } from "@shared/ui/form";
-import { Trash2 } from "lucide-react";
-import { NumberStepper } from "@shared/ui/number-stepper";
+import Image from 'next/image';
+import { type ICartItem as CartItem } from '@/entities/cart';
+import { formatCurrency } from '@/shared/utils/format';
+import { Checkbox } from '@shared/ui/form';
+import { Trash2 } from 'lucide-react';
+import { NumberStepper } from '@shared/ui/number-stepper';
 
 type CartItemProps = {
   item: CartItem;
@@ -15,7 +15,7 @@ type CartItemProps = {
   onDecrease: () => void;
   onRemove: () => void;
 
-  variant?: "default" | "compact";
+  variant?: 'default' | 'compact';
 };
 
 export function CartItem({
@@ -26,13 +26,12 @@ export function CartItem({
   onDecrease,
   onRemove,
 
-  variant = "default",
+  variant = 'default',
 }: CartItemProps) {
   const lineTotal = item.price * item.qty;
-  const hasDiscount =
-    typeof item.originalPrice === "number" && item.originalPrice > item.price;
+  const hasDiscount = typeof item.originalPrice === 'number' && item.originalPrice > item.price;
 
-  if (variant === "compact") {
+  if (variant === 'compact') {
     return (
       <div className="py-1">
         <div className="flex gap-2">
@@ -49,23 +48,23 @@ export function CartItem({
           <div className="flex flex-col gap-1 flex-1">
             <div className="relative w-full overflow-hidden rounded-md bg-slate-100 aspect-square">
               <Image
-                src={item.imageUrl ?? "/placeholder.png"}
+                src={item.imageUrl ?? '/placeholder.png'}
                 alt={item.name}
                 fill
                 sizes="192px"
                 className="object-cover"
-                unoptimized={item.imageUrl.startsWith("http://localhost")}
+                unoptimized={item.imageUrl.startsWith('http://localhost')}
               />
             </div>
 
             <div className="mt-0.5 flex items-baseline gap-1 leading-tight">
               {hasDiscount && (
                 <span className="text-[10px] text-slate-400 line-through whitespace-nowrap">
-                  {formatCurrency(item.originalPrice!)}
+                  {formatCurrency(item.originalPrice!)} đ/kg
                 </span>
               )}
               <span className="text-sm font-semibold text-emerald-600 whitespace-nowrap">
-                {formatCurrency(item.price)}
+                {formatCurrency(item.price)} đ/kg
               </span>
             </div>
 
@@ -128,11 +127,11 @@ export function CartItem({
         <div className="flex flex-1 gap-3 sm:gap-4">
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-slate-100 sm:h-20 sm:w-20">
             <Image
-              src={item.imageUrl ?? "/placeholder.png"}
+              src={item.imageUrl ?? '/placeholder.png'}
               alt={item.name}
               fill
               className="object-cover"
-              unoptimized={item.imageUrl.startsWith("http://localhost")}
+              unoptimized={item.imageUrl.startsWith('http://localhost')}
             />
           </div>
 
@@ -142,9 +141,7 @@ export function CartItem({
             </p>
 
             <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-[10px] uppercase tracking-wide text-slate-400">
-                Đơn giá
-              </span>
+              <span className="text-[10px] uppercase tracking-wide text-slate-400">Đơn giá</span>
 
               {hasDiscount && (
                 <span className="text-[11px] text-slate-400 line-through">
@@ -159,11 +156,7 @@ export function CartItem({
 
             <div className="mt-2 flex items-center gap-2">
               <span className="text-[11px] text-slate-500">Số lượng</span>
-              <NumberStepper
-                value={item.qty}
-                onDecrease={onDecrease}
-                onIncrease={onIncrease}
-              />
+              <NumberStepper value={item.qty} onDecrease={onDecrease} onIncrease={onIncrease} />
             </div>
           </div>
         </div>

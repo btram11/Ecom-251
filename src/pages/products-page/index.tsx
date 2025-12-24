@@ -1,16 +1,15 @@
-import { Filter } from "./ui/filter";
-import { Button } from "@shared/ui/button";
-import { ProductsList } from "@widgets/product-list";
+import { Filter } from './ui/filter';
+import { Button } from '@shared/ui/button';
+import { ProductsList } from '@widgets/product-list';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/form';
+import { Breadcrumb } from '@shared/ui/breadcrumb';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@shared/ui/form";
-import { Breadcrumb } from "@shared/ui/breadcrumb";
-import {  getProductListings, mapListingToCard, ProductListingQuery } from "@entities/product";
-import { getCategories } from "@entities/category";
+  getProductListings,
+  mapListingToCard,
+  mapProductToCard,
+  ProductListingQuery,
+} from '@entities/product';
+import { getCategories } from '@entities/category';
 // import { ProductListings } from "./ui/product-listings";
 
 type Props = {
@@ -23,14 +22,14 @@ export async function ProductsPage({ query }: Props) {
     getProductListings(query),
   ]);
 
-  const data = listingsRes.data?.content.map(mapListingToCard) ?? [];
+  const data = listingsRes.data?.content.map(mapProductToCard) ?? [];
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto md:px-4 py-6 px-3">
         <Breadcrumb path="/products" />
         <div className="flex flex-col md:flex-row gap-6">
-          <Filter categories={categoriesRes.data ?? []}/>
+          <Filter categories={categoriesRes.data ?? []} />
 
           <div className="flex-1 space-y-4">
             <div className="flex items-center justify-end gap-4">
@@ -48,16 +47,11 @@ export async function ProductsPage({ query }: Props) {
                 </SelectContent>
               </Select>
             </div>
-            <ProductsList items={data}/>
+            <ProductsList items={data} />
 
             {/* Pagination */}
             <div className="flex items-center justify-center gap-2 pt-6">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9"
-                disabled
-              >
+              <Button variant="outline" size="icon" className="h-9 w-9" disabled>
                 ‹
               </Button>
               <Button

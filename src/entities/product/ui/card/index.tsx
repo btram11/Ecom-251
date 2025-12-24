@@ -1,8 +1,9 @@
-import { Card } from "@shared/ui/card";
-import { Star, MapPin } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { ProductCardData } from "@entities/product/model/types";
+import { Card } from '@shared/ui/card';
+import { Star, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ProductCardData } from '@entities/product/model/types';
+import { formatCurrency } from '@shared/utils/format';
 
 export interface ProductCardProps extends ProductCardData {
   action?: React.ReactNode;
@@ -29,7 +30,7 @@ export const ProductCard = ({
             alt={name}
             width={200}
             height={200}
-            unoptimized={image.startsWith("http://localhost")}
+            unoptimized={image.startsWith('http://localhost')}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         </div>
@@ -52,12 +53,10 @@ export const ProductCard = ({
 
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-lg font-bold text-success">
-                {price.toLocaleString("vi-VN")} đ/kg
-              </div>
+              <div className="text-lg font-bold text-success">{formatCurrency(price)}</div>
               {originalPrice && (
                 <div className="text-xs text-muted-foreground line-through">
-                  {originalPrice.toLocaleString("vi-VN")} đ
+                  {formatCurrency(originalPrice)}
                 </div>
               )}
             </div>
