@@ -19,7 +19,7 @@ type ProductApiResponse = {
 };
 
 export async function getProductById(
-  productId: number
+  productId: number | string
 ): Promise<Product | null> {
   try {
     const res = await fetch(
@@ -43,12 +43,14 @@ export async function getProductById(
     return {
       id: String(p.id),
       name: p.name,
+      baseUnit: p.baseUnit,
       avgRating: p.rating,
       reviewCount: 0,
       sellerLocation: p.location,
       origin: p.categoryNames?.[0] ?? "Không rõ",
       harvestDateISO: "",
       stockKg: 0,
+      price: p.price,
       priceVndPerKg: p.price - (p.discount / 100) * p.price,
       images: p.imageUrl ? [p.imageUrl] : ["/placeholder.png"],
       description: `Danh mục: ${p.categoryNames.join(", ")}`,

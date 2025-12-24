@@ -1,6 +1,6 @@
 export type Product = {
   /** ====== From Java ====== */
-  id: number;
+  id: number | string;
   name: string;
 
   baseUnit: "PIECE" | "KG" | "BOX" | string;

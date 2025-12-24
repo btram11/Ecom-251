@@ -38,8 +38,8 @@ export const getProductListings = async (
   });
 
   const url = query
-    ? `${paths.productListings.list}?${query}`
-    : paths.productListings.list;
+    ? `${paths.products.list}?${query}`
+    : paths.products.list;
 
   return api.get<Page<ProductListing>>(apiUrl(url));
 };
