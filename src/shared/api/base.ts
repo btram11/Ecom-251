@@ -8,6 +8,8 @@ type RequestOptions = {
   params?: Record<string, string | number | boolean | undefined | null>;
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
+  throwOnError?: boolean;
+  errorMessage?: string; 
 };
 
 export async function fetchApi<T>(
@@ -21,6 +23,8 @@ export async function fetchApi<T>(
       body,
       cache = "no-store",
       next,
+      throwOnError = false,
+      errorMessage,
     } = options;
 
     const res = await fetch(url, {
@@ -37,11 +41,17 @@ export async function fetchApi<T>(
     });
 
     const json = (await res.json()) as APIResponse<T>;
-
     if (!res.ok) {
+      const message =
+        errorMessage ?? json?.message ?? `HTTP ${res.status}`;
+
+      if (throwOnError) {
+        throw new Error(message);
+      }
+
       return {
         success: false,
-        message: json?.message ?? `HTTP ${res.status}`,
+        message,
         data: null,
       };
     }
