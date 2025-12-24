@@ -36,7 +36,7 @@ import {
   Home,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { getSellerOrders, type Order, formatOrderId } from "@/entities/order";
+import { getSellerOrders, type Order, formatOrderId, confirmOrder, cancelOrder } from "@/entities/order";
 import { ORDER_STATUS_META } from "@/entities/order/model/status";
 
 export default function SellerPage() {
@@ -97,10 +97,16 @@ export default function SellerPage() {
     setIsValidComplaint(false);
   };
 
-  const confirmCancelOrder = () => {
-    // Logic to cancel order would go here
-    console.log("Cancelling order:", orderToCancel?.id);
-    closeCancelModal();
+  const confirmCancelOrder = async () => {
+    if (!orderToCancel) return;
+    try {
+      await cancelOrder(orderToCancel.id);
+      setOrders((prev) => prev.filter((o) => o.id !== orderToCancel.id));
+      closeCancelModal();
+    } catch (err) {
+      console.error("Failed to cancel order:", err);
+      alert("Không thể hủy đơn hàng. Vui lòng thử lại.");
+    }
   };
 
   // Helper functions
@@ -408,6 +414,20 @@ export default function SellerPage() {
                         <Button
                           size="sm"
                           className="bg-green-600 hover:bg-green-700 flex-1 lg:flex-none min-w-32"
+                          onClick={async () => {
+                            try {
+                              await confirmOrder(order.id);
+                              setOrders((prev) =>
+                                prev.map((o) =>
+                                  o.id === order.id
+                                    ? { ...o, orderStatus: "DELIVERING" as const }
+                                    : o
+                                )
+                              );
+                            } catch (err) {
+                              alert("Không thể xác nhận đơn hàng. Vui lòng thử lại.");
+                            }
+                          }}
                         >
                           Xác nhận đơn
                         </Button>
@@ -605,7 +625,24 @@ export default function SellerPage() {
                     Đóng
                   </Button>
                   {selectedOrder.orderStatus === "WAITING" && (
-                    <Button className="bg-green-600 hover:bg-green-700">
+                    <Button 
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={async () => {
+                        try {
+                          await confirmOrder(selectedOrder.id);
+                          setOrders((prev) =>
+                            prev.map((o) =>
+                              o.id === selectedOrder.id
+                                ? { ...o, orderStatus: "DELIVERING" as const }
+                                : o
+                            )
+                          );
+                          closeModal();
+                        } catch (err) {
+                          alert("Không thể xác nhận đơn hàng. Vui lòng thử lại.");
+                        }
+                      }}
+                    >
                       Xác nhận đơn
                     </Button>
                   )}

@@ -1,18 +1,31 @@
-import { Eye } from "lucide-react";
+import { Eye, CheckCircle } from "lucide-react";
 import type { Order } from "../model/types";
 import { ORDER_STATUS_META } from "../model/status";
 import { formatOrderId } from "../lib/format-order-id";
+import { completeOrder } from "../api/update-order-status";
 
 export function OrderCard({
   order,
   onViewDetails,
+  onOrderStatusChange,
 }: {
   order: Order;
   onViewDetails?: (orderId: string) => void;
+  onOrderStatusChange?: (orderId: string, newStatus: string) => void;
 }) {
   const meta = ORDER_STATUS_META[order.orderStatus] || ORDER_STATUS_META.WAITING;
 
   const formattedDate = new Date(order.createdAt).toLocaleDateString("vi-VN");
+
+  const handleCompleteOrder = async () => {
+    try {
+      await completeOrder(order.id);
+      onOrderStatusChange?.(order.id, "DELIVERED");
+    } catch (err) {
+      console.error("Failed to complete order:", err);
+      alert("Không thể xác nhận nhận hàng. Vui lòng thử lại.");
+    }
+  };
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition">
@@ -32,14 +45,27 @@ export function OrderCard({
             {meta.label}
           </span>
 
-          <button
-            type="button"
-            onClick={() => onViewDetails?.(order.id)}
-            className="flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-gray-50 transition"
-          >
-            <Eye className="w-4 h-4 text-gray-600" />
-            Xem chi tiết
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onViewDetails?.(order.id)}
+              className="flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-gray-50 transition"
+            >
+              <Eye className="w-4 h-4 text-gray-600" />
+              Xem chi tiết
+            </button>
+
+            {order.orderStatus === "DELIVERING" && (
+              <button
+                type="button"
+                onClick={handleCompleteOrder}
+                className="flex items-center gap-2 border border-green-300 rounded-lg px-3 py-1.5 text-sm font-medium text-green-600 hover:bg-green-50 transition"
+              >
+                <CheckCircle className="w-4 h-4" />
+                Đã nhận được hàng
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

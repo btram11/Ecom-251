@@ -36,6 +36,16 @@ export function OrdersPage({ orders: initialOrders }: OrdersPageProps) {
     return filterOrdersByTab(orders, activeTab);
   }, [orders, activeTab]);
 
+  const handleOrderStatusChange = (orderId: string, newStatus: string) => {
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === orderId
+          ? { ...order, orderStatus: newStatus as any }
+          : order
+      )
+    );
+  };
+
   if (loading) {
     return (
       <div className="font-sans text-gray-800">
@@ -68,6 +78,7 @@ export function OrdersPage({ orders: initialOrders }: OrdersPageProps) {
               onViewDetails={(orderId) => {
                 console.log("view details", orderId);
               }}
+              onOrderStatusChange={handleOrderStatusChange}
             />
           ))}
         </div>
