@@ -1,8 +1,11 @@
+'use client';
 import { Search, ShoppingCart, User } from "lucide-react";
 import { Button } from "@shared/ui/button";
 import { Input } from "@shared/ui/input";
 import { Badge } from "@shared/ui/badge";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getMe, MeResponse } from "@shared/api/get-me";
 
 function TopBar() {
   return (
@@ -47,6 +50,14 @@ function TopBar() {
 }
 
 export const Header = () => {
+  const [user, setUser] = useState<MeResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getMe()
+      .then(setUser)
+      .finally(() => setLoading(false));
+  }, []);
   return (
     <>
       {/* <TopBar /> */}
@@ -117,9 +128,23 @@ export const Header = () => {
               {/* <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
               </Button> */}
-              <Button className="ml-2 bg-success hover:bg-success/90" asChild>
-                <Link href="/login">Đăng nhập</Link>
-              </Button>
+              {!loading && (
+                user ? (
+                  // ===== ĐÃ ĐĂNG NHẬP =====
+                  <Link href="/profile">
+                    <img
+                      src={user.picture || "/avatar-default.png"}
+                      alt="avatar"
+                      className="h-9 w-9 rounded-full border object-cover"
+                    />
+                  </Link>
+                ) : (
+                  // ===== CHƯA ĐĂNG NHẬP =====
+                  <Button className="bg-success hover:bg-success/90" asChild>
+                    <Link href="/login">Đăng nhập</Link>
+                  </Button>
+                )
+              )}
             </div>
           </div>
         </div>
