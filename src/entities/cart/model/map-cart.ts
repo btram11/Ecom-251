@@ -1,7 +1,8 @@
 import { getProductById } from "@/entities/product/api/get-product";
 import type { ICartItemGroup } from "@/entities/cart";
+import { CartItemResponse } from "../api/types";
 
-export async function mapCartToGroups(cartItems: any[]): Promise<ICartItemGroup[]> {
+export async function mapCartToGroups(cartItems: CartItemResponse[]): Promise<ICartItemGroup[]> {
   const groups: Record<string, ICartItemGroup> = {};
 
   for (const item of cartItems) {

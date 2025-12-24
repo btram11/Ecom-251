@@ -1,60 +1,60 @@
+import { api, isOk } from "@shared/api";
+import { apiUrl } from "@shared/lib/api-helper";
+import { paths } from "@shared/config/paths";
 import type { Product } from "../model/types";
-import { environment } from "../../../../environment";
+import type { APIResponse } from "@shared/api/types";
 
-type ProductApiResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    id: number;
-    name: string;
-    baseUnit: string;
-    imageUrl: string;
-    imageType: string;
-    price: number;
-    discount: number;
-    rating: number;
-    location: string;
-    categoryNames: string[];
-  };
+export const getProductById = async (
+  productId: number | string
+): Promise<Product | null> => {
+  const res = await getProductByIdRaw(productId);
+
+  if (!isOk(res)) return null;
+
+  return res.data;
 };
 
-export async function getProductById(
-  productId: number
-): Promise<Product | null> {
-  try {
-    const res = await fetch(
-      `${environment.SERVICE_URL}/api/products/${productId}`,
-      {
-        credentials: "include",
-        cache: "no-store",      
-      }
-    );
 
-    if (!res.ok) {
-      console.error("Fetch product failed:", res.status);
-      return null;
-    }
-
-    const json: ProductApiResponse = await res.json();
-    if (!json.success || !json.data) return null;
-
-    const p = json.data;
-
-    return {
-      id: String(p.id),
-      name: p.name,
-      avgRating: p.rating,
-      reviewCount: 0,
-      sellerLocation: p.location,
-      origin: p.categoryNames?.[0] ?? "Không rõ",
-      harvestDateISO: "",
-      stockKg: 0,
-      priceVndPerKg: p.price - (p.discount / 100) * p.price,
-      images: p.imageUrl ? [p.imageUrl] : ["/placeholder.png"],
-      description: `Danh mục: ${p.categoryNames.join(", ")}`,
-    };
-  } catch (error) {
-    console.error("Failed to fetch product", error);
-    return null;
+export const getProductByIdRaw = async (
+  productId: number | string,
+  options?: {
+    throwOnError?: boolean;
+    errorMessage?: string;
   }
-}
+): Promise<APIResponse<Product>> => {
+  return api.get<Product>(
+    apiUrl(paths.products.detail(productId)),
+    {
+      cache: "no-cache",
+      ...options,
+    }
+  );
+};
+
+
+
+import type { Page } from "@shared/api/types";
+
+export type GetProductsParams = {
+  page?: number;
+  size?: number;
+  keyword?: string;
+};
+
+export const getProducts = async (
+  params?: GetProductsParams
+): Promise<APIResponse<Page<Product>>> => {
+  const query = new URLSearchParams();
+
+  if (params?.page !== undefined) query.set("page", String(params.page));
+  if (params?.size !== undefined) query.set("size", String(params.size));
+  if (params?.keyword) query.set("keyword", params.keyword);
+
+  const qs = query.toString();
+  const url = qs
+    ? `${paths.products.list}?${qs}`
+    : paths.products.list;
+
+  return api.get<Page<Product>>(apiUrl(url));
+};
+

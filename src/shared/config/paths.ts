@@ -22,6 +22,7 @@ export const paths = {
   },
 
   auth: {
+    me: "/api/auth/me/token",
     googleCallback: "/api/auth/google/callback",
   },
 
@@ -63,8 +64,8 @@ export const paths = {
   },
 
   users: {
-    cart: (id: number | string) => `/api/user/${id}/cart`,
-    clearCart: (id: number | string) => `/api/user/${id}/cart/clear`,
+    cart: `/api/user/cart`,
+    clearCart: `/api/user/cart/clear`,
     firstLogin: "/api/user/first-login",
     myInfo: "/api/user/my-info",
   },
