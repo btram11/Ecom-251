@@ -1,6 +1,7 @@
 import { Eye } from "lucide-react";
 import type { Order } from "../model/types";
 import { ORDER_STATUS_META } from "../model/status";
+import { formatOrderId } from "../lib/format-order-id";
 
 export function OrderCard({
   order,
@@ -19,7 +20,7 @@ export function OrderCard({
       <div className="border-b border-gray-100 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div>
-            <h3 className="font-semibold text-gray-900">{order.id}</h3>
+            <h3 className="font-semibold text-gray-900">{formatOrderId(order.id, order.createdAt)}</h3>
             <p className="text-xs text-gray-500">{formattedDate}</p>
           </div>
         </div>

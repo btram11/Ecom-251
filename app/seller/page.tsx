@@ -36,7 +36,7 @@ import {
   Home,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { getSellerOrders, type Order } from "@/entities/order";
+import { getSellerOrders, type Order, formatOrderId } from "@/entities/order";
 import { ORDER_STATUS_META } from "@/entities/order/model/status";
 
 export default function SellerPage() {
@@ -160,6 +160,7 @@ export default function SellerPage() {
       // Filter by search term
       if (
         searchTerm &&
+        !formatOrderId(order.id, order.createdAt).toLowerCase().includes(searchTerm.toLowerCase()) &&
         !order.id.toLowerCase().includes(searchTerm.toLowerCase()) &&
         !order.name.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
@@ -345,7 +346,7 @@ export default function SellerPage() {
               <div className="flex justify-between items-start mb-4">
                 {/* Order Title */}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{order.id}</h3>
+                  <h3 className="font-semibold text-lg">{formatOrderId(order.id, order.createdAt)}</h3>
                 </div>
                 {/* Status Badge - Same line as title */}
                 <div>{getStatusBadge(order.orderStatus)}</div>
@@ -478,7 +479,7 @@ export default function SellerPage() {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h2 className="text-2xl font-bold">Chi tiết đơn hàng</h2>
-                  <p className="text-gray-600">{selectedOrder.id}</p>
+                  <p className="text-gray-600">{formatOrderId(selectedOrder.id, selectedOrder.createdAt)}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <button
@@ -626,7 +627,7 @@ export default function SellerPage() {
               {/* Content - Increased to base size */}
               <p className="text-base text-gray-600">
                 Bạn có chắc chắn muốn huỷ đơn hàng{" "}
-                <strong>{orderToCancel.id}</strong> không?
+                <strong>{formatOrderId(orderToCancel.id, orderToCancel.createdAt)}</strong> không?
                 <br />
                 Hành động này không thể hoàn tác.
               </p>
