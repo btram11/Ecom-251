@@ -2,15 +2,7 @@
 
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
-import {
-  ChevronDown,
-  ChevronRight,
-  Package,
-  BarChart3,
-  ShoppingCart,
-  Plus,
-} from "lucide-react";
-import { useState } from "react";
+import { BarChart3, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 interface SidebarProps {
@@ -18,8 +10,6 @@ interface SidebarProps {
 }
 
 export function AdminSidebar({ className }: SidebarProps) {
-  const [productMenuOpen, setProductMenuOpen] = useState(false);
-
   return (
     <Card className={`w-64 min-h-fit p-4 ${className}`}>
       <nav className="space-y-2">
