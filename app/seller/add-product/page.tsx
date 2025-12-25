@@ -157,38 +157,48 @@ export default function AddProductPage() {
             <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
               {/* Main image indicator */}
               <div className="relative group">
-                <label className="aspect-square border-2 border-primary border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200">
-                  <Upload className="h-10 w-10 text-primary mb-3" />
-                  <span className="text-sm text-primary font-medium">Ảnh chính</span>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    Click để thêm
-                  </span>
-                  
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        handleImageUpload(e.target.files[0]);
-                      }
-                    }}
-                  />
-                </label>
-                {imageBase64 && (
-                  <div className="mt-6 flex justify-center">
+                {imageBase64 ? (
+                  <div className="aspect-square border-2 border-primary rounded-xl overflow-hidden flex items-center justify-center bg-white relative">
                     <img
                       src={`data:${imageType};base64,${imageBase64}`}
                       alt="Preview"
-                      className="h-40 rounded-lg border"
+                      className="w-full h-full object-cover"
                     />
+                    <button
+                      onClick={() => {
+                        setImageBase64("");
+                        setImageType("");
+                      }}
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                    <div className="absolute top-2 left-2 bg-primary text-primary-foreground rounded-full p-2">
+                      <Star className="h-4 w-4" />
+                    </div>
                   </div>
+                ) : (
+                  <label className="aspect-square border-2 border-primary border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200">
+                    <Upload className="h-10 w-10 text-primary mb-3" />
+                    <span className="text-sm text-primary font-medium">Ảnh chính</span>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      Click để thêm
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) {
+                          handleImageUpload(e.target.files[0]);
+                        }
+                      }}
+                    />
+                    <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-2 shadow-lg">
+                      <Star className="h-4 w-4" />
+                    </div>
+                  </label>
                 )}
-
-                <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground rounded-full p-2 shadow-lg">
-                  <Star className="h-4 w-4" />
-                </div>
               </div>
 
               {/* Additional images */}
