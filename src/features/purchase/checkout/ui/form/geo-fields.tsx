@@ -9,6 +9,7 @@ import {
 } from "@/entities/geo/model/queries";
 import type { ShippingAddress } from "../../model/types";
 import { FieldError } from "react-hook-form";
+import { findCodeByName } from "@shared/lib/api-helper";
 
 type GeoCodeState = {
   provinceCode: string;
@@ -25,9 +26,8 @@ export function GeoFields({
 }: {
   address: Pick<ShippingAddress, "province" | "district" | "ward">;
   setAddress: (patch: Partial<ShippingAddress>) => void;
-  geoCode: GeoCodeState; // codes
+  geoCode: GeoCodeState;
   setGeoCode: React.Dispatch<React.SetStateAction<GeoCodeState>>;
-
   errors?: {
     province?: FieldError | string;
     district?: FieldError | string;
@@ -47,26 +47,63 @@ export function GeoFields({
     onName(name);
   };
 
+  // ===== AUTO MAP FROM DB =====
+
+  React.useEffect(() => {
+    if (!address.province || !provincesQ.data?.length) return;
+
+    const code = findCodeByName(provincesQ.data, address.province);
+
+    if (code && code !== geoCode.provinceCode) {
+      setGeoCode({
+        provinceCode: code,
+        districtCode: "",
+        wardCode: "",
+      });
+    }
+  }, [address.province, provincesQ.data]);
+
+  React.useEffect(() => {
+    if (!address.district || !districtsQ.data?.length) return;
+
+    const code = findCodeByName(districtsQ.data, address.district);
+
+    if (code && code !== geoCode.districtCode) {
+      setGeoCode((prev) => ({
+        ...prev,
+        districtCode: code,
+        wardCode: "",
+      }));
+    }
+  }, [address.district, districtsQ.data]);
+
+  React.useEffect(() => {
+    if (!address.ward || !wardsQ.data?.length) return;
+
+    const code = findCodeByName(wardsQ.data, address.ward);
+
+    if (code && code !== geoCode.wardCode) {
+      setGeoCode((prev) => ({
+        ...prev,
+        wardCode: code,
+      }));
+    }
+  }, [address.ward, wardsQ.data]);
+
+  // ===== RENDER =====
+
   return (
     <>
-      <FieldWrapper label="Tỉnh/Thành phố" labelFor="province" required>
+      <FieldWrapper label="Tỉnh/Thành phố" required>
         <Combobox
-          id="province"
-          name="provinceCode"
           value={geoCode.provinceCode}
           options={provincesQ.data ?? []}
-          placeholder={
-            provincesQ.isLoading ? "Đang tải..." : "Chọn Tỉnh/Thành phố"
-          }
+          placeholder="Chọn Tỉnh/Thành phố"
           disabled={provincesQ.isLoading}
           invalid={!!errors?.province}
           onValueChange={(code) => {
             onPick(provincesQ.data, code, (name) =>
-              setAddress({
-                province: name,
-                district: "",
-                ward: "",
-              })
+              setAddress({ province: name, district: "", ward: "" })
             );
 
             setGeoCode({
@@ -78,19 +115,11 @@ export function GeoFields({
         />
       </FieldWrapper>
 
-      <FieldWrapper label="Quận/Huyện" labelFor="district" required>
+      <FieldWrapper label="Quận/Huyện" required>
         <Combobox
-          id="district"
-          name="districtCode"
           value={geoCode.districtCode}
           options={districtsQ.data ?? []}
-          placeholder={
-            !geoCode.provinceCode
-              ? "Chọn Tỉnh/TP trước"
-              : districtsQ.isLoading
-              ? "Đang tải..."
-              : "Chọn Quận/Huyện"
-          }
+          placeholder="Chọn Quận/Huyện"
           disabled={!geoCode.provinceCode || districtsQ.isLoading}
           invalid={!!errors?.district}
           onValueChange={(code) => {
@@ -107,23 +136,17 @@ export function GeoFields({
         />
       </FieldWrapper>
 
-      <FieldWrapper label="Phường/Xã" labelFor="ward" required>
+      <FieldWrapper label="Phường/Xã" required>
         <Combobox
-          id="ward"
-          name="wardCode"
           value={geoCode.wardCode}
           options={wardsQ.data ?? []}
-          placeholder={
-            !geoCode.districtCode
-              ? "Chọn Quận/Huyện trước"
-              : wardsQ.isLoading
-              ? "Đang tải..."
-              : "Chọn Phường/Xã"
-          }
+          placeholder="Chọn Phường/Xã"
           disabled={!geoCode.districtCode || wardsQ.isLoading}
           invalid={!!errors?.ward}
           onValueChange={(code) => {
-            onPick(wardsQ.data, code, (name) => setAddress({ ward: name }));
+            onPick(wardsQ.data, code, (name) =>
+              setAddress({ ward: name })
+            );
             setGeoCode((prev) => ({ ...prev, wardCode: code }));
           }}
         />

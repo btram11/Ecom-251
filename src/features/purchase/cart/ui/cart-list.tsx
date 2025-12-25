@@ -141,7 +141,7 @@ export function CartList() {
                 </div>
                 <div className="flex items-center justify-between text-slate-600">
                   <span>Phí vận chuyển dự kiến</span>
-                  <span>{selectedQty > 0 ? formatCurrency(shipping) : '0 đ'}</span>
+                  <span>{selectedQty > 0 ? formatCurrency(32000) : '0 đ'}</span>
                 </div>
                 <div className="mt-3 border-t border-slate-200 pt-3">
                   <div className="flex items-center justify-between text-[15px] font-semibold text-slate-900">

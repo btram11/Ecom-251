@@ -20,3 +20,26 @@ export const buildQueryString = (params?: Record<string, any>) => {
   return qs.toString();
 };
 
+export function normalize(s: string) {
+  return s
+    .toLowerCase()
+    .replace(/tp\.?|thành phố|tỉnh|quận|huyện|phường|xã/gi, "")
+    .trim();
+}
+
+export function findCodeByName(
+  options: { value: string; label: string }[] | undefined,
+  name?: string
+): string {
+  if (!options || !name) return "";
+
+  const n = normalize(name);
+
+  return (
+    options.find((o) => normalize(o.label) === n)?.value ??
+    options.find((o) => normalize(o.label).includes(n))?.value ??
+    ""
+  );
+}
+
+

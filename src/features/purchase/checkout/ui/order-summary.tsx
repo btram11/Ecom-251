@@ -23,7 +23,7 @@ export function OrderSummary({
 
         <div className="flex items-center justify-between text-slate-600">
           <span>Phí vận chuyển dự kiến</span>
-          <span>{formatCurrency(shippingFee)}</span>
+          <span>{formatCurrency(32000)}</span>
         </div>
 
         <div className="mt-2 border-t border-slate-200 pt-3">
