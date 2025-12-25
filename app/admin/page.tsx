@@ -25,10 +25,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { History, Package, CheckCircle, Coins } from "lucide-react";
 import { SellerHeader } from "@widgets/seller-header";
-import { Sidebar } from "@widgets/sidebar";
-import { AdminSidebar } from "@widgets/admin-sidebard";
+import { AdminSidebar } from "@widgets/admin-sidebar";
 import { MetricCard } from "./components/MetricCard";
 import { RecentOrders } from "./components/RecentOrder";
 // Dữ liệu giả lập khớp với hình ảnh
