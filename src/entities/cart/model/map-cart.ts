@@ -22,11 +22,11 @@ export async function mapCartToGroups(cartItems: CartItemResponse[]): Promise<IC
 
     groups[item.sellerId].lines.push({
       id: `${item.sellerId}-${item.productId}`,
-      productId: item.productId,
+      productId: product?.id?.toString() ?? '0',
       name: product?.name ?? 'Sản phẩm',
       imageUrl: product?.images?.[0] || '/placeholder.png',
-      price: product?.priceVndPerKg || 0,
-      qty: 1,
+      price: (product?.priceVndPerKg ?? product?.price) || 0,
+      qty: item.amount > 1 ? item.amount : 1,
       isSelected: false,
       sellerId: '',
     });
